@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Idoctor</string>
+    <string name="app_name">iDoctor</string>
+    <string name="titulo_inicio">iDoctor</string>
+    <string name="subtitulo_inicio">Gestión sencilla de citas médicas</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="registrarse">Registrarse</string>
 </resources>
