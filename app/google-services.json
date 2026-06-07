@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "481786499951",
+    "project_id": "idoctor-8b92a",
+    "storage_bucket": "idoctor-8b92a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481786499951:android:3a70c869b188b4e2764e9a",
+        "android_client_info": {
+          "package_name": "com.example.idoctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "481786499951-1juc6n2gcu4dk03mrd2nuechhlgn5d2n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.idoctor",
+            "certificate_hash": "a8d196122267e8abd5cebbfa84827283e3cb2cf1"
+          }
+        },
+        {
+          "client_id": "481786499951-d7paj5nr7r8gunslio9h5ooae4t1oaaa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1CQ7QDVMjQG1QBodAu1wbmatUSR7zL8I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "481786499951-d7paj5nr7r8gunslio9h5ooae4t1oaaa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

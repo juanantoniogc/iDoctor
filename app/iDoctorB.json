@@ -1,0 +1,103 @@
+{
+  "appointments": {
+    "-OI6zIL1dFJlp1YrC_Sy": {
+      "consultationId": "-OG3xGJ8bDHjn9WpAZQw",
+      "date": "2026-02-10",
+      "id": "-OI6zIL1dFJlp1YrC_Sy",
+      "isActive": false,
+      "patientId": "X9pQ2wR5sT3mN8kL1vJ4",
+      "professionalId": "B1nJ8mK4L2xP9qR5sT3w",
+      "time": "10:30"
+    }
+  },
+  "consultations": {
+    "-OG3xGJ8bDHjn9WpAZQw": {
+      "address": {
+        "city": "Morón de la Frontera",
+        "country": "España",
+        "floor": "1",
+        "number": "5",
+        "portal": "A",
+        "postalCode": "41530",
+        "province": "Sevilla",
+        "street": "Calle Nueva"
+      },
+      "email": "contacto@clinicamoron.es",
+      "id": "-OG3xGJ8bDHjn9WpAZQw",
+      "phone": "954850000",
+      "professionalId": "B1nJ8mK4L2xP9qR5sT3w",
+      "title": "Clínica Morón Salud",
+      "url": "https://clinicamoron.es"
+    }
+  },
+  "evaluations": {
+    "-OJ7aJM2eGKmq2ZsD_Tz": {
+      "appointmentId": "-OI6zIL1dFJlp1YrC_Sy",
+      "description": "Exploración de tobillo tras esguince.",
+      "exploration": "Movilidad mejorada, persiste inflamación leve.",
+      "id": "-OJ7aJM2eGKmq2ZsD_Tz",
+      "moment": "2026-02-10T11:00:00",
+      "patientId": "X9pQ2wR5sT3mN8kL1vJ4"
+    }
+  },
+  "patients": {
+    "X9pQ2wR5sT3mN8kL1vJ4": {
+      "dni": "12345678X",
+      "healthInsuranceNumber": "SEG-445566",
+      "id": "X9pQ2wR5sT3mN8kL1vJ4",
+      "name": "Juan Antonio",
+      "phone": "612345678",
+      "photo": "https://randomuser.me/api/portraits/men/2.jpg",
+      "surname": "García"
+    }
+  },
+  "professionals": {
+    "B1nJ8mK4L2xP9qR5sT3w": {
+      "collegiateNumber": "282812345",
+      "description": "Especialista en rehabilitación deportiva.",
+      "id": "B1nJ8mK4L2xP9qR5sT3w",
+      "name": "Pablo",
+      "photo": "https://randomuser.me/api/portraits/men/1.jpg",
+      "specialty": "Fisioterapia",
+      "surname": "Carrillo"
+    }
+  },
+  "timetables": {
+    "-OH5yHK9cEIko0XqB_Rx": {
+      "consultationId": "-OG3xGJ8bDHjn9WpAZQw",
+      "dayOfWeek": "Lunes",
+      "endTime": "14:00",
+      "id": "-OH5yHK9cEIko0XqB_Rx",
+      "startTime": "09:00"
+    }
+  },
+  "users": {
+    "B1nJ8mK4L2xP9qR5sT3w": {
+      "name": "Ang",
+      "surname": "Prados",
+      "photo": "",
+      "email": "ang.prof@idoctor.es",
+      "id": "B1nJ8mK4L2xP9qR5sT3w",
+      "password": "hashed_password_456",
+      "role": "professional"
+    },
+    "V3mG9qR5pZ2xL8nK1tW4": {
+      "name": "Pablo",
+      "surname": "Castro",
+      "photo": "",
+      "email": "pablo.prof@idoctor.es",
+      "id": "V3mG9qR5pZ2xL8nK1tW4",
+      "password": "hashed_password_455",
+      "role": "professional"
+    },
+    "X9pQ2wR5sT3mN8kL1vJ4": {
+      "name": "Juan",
+      "surname": "Castro",
+      "photo": "",
+      "email": "juan.paciente@gmail.com",
+      "id": "X9pQ2wR5sT3mN8kL1vJ4",
+      "password": "hashed_password_789",
+      "role": "patient"
+    }
+  }
+}
