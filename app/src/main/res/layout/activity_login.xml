@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EAF6FF"
-    android:fillViewport="true"
-    tools:context=".MainActivity">
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,26 +13,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            app:cardBackgroundColor="#D6ECFF"
-            app:cardCornerRadius="48dp"
-            app:cardElevation="4dp"
-            app:strokeColor="#1976D2"
-            app:strokeWidth="2dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="🩺"
-                android:textSize="44sp" />
-
-        </com.google.android.material.card.MaterialCardView>
-
         <TextView
-            android:id="@+id/txtTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
@@ -46,12 +24,11 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/txtSubtitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Consulta con doctores y gestiona tu salud fácilmente"
+            android:text="Inicia sesión para acceder a tus consultas"
             android:textColor="#607D8B"
             android:textSize="16sp" />
 
@@ -75,43 +52,87 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Acceso médico"
+                    android:text="Acceso a consultas"
                     android:textColor="#0D47A1"
                     android:textSize="23sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="Entra como paciente o profesional para gestionar citas, consultas e historial médico."
-                    android:textColor="#607D8B"
-                    android:textSize="15sp" />
+                    android:layout_marginTop="26dp"
+                    android:hint="Email"
+                    app:boxBackgroundColor="#F7FBFF"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxStrokeColor="#1976D2"
+                    app:hintTextColor="#1976D2"
+                    app:startIconDrawable="@android:drawable/ic_dialog_email"
+                    app:startIconTint="#1976D2">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtCorreo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:textColor="#263238"
+                        android:textColorHint="#90A4AE" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:hint="Contraseña"
+                    app:boxBackgroundColor="#F7FBFF"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxStrokeColor="#1976D2"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="#1976D2"
+                    app:hintTextColor="#1976D2"
+                    app:startIconDrawable="@android:drawable/ic_lock_lock"
+                    app:startIconTint="#1976D2">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtContrasena"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:textColor="#263238"
+                        android:textColorHint="#90A4AE" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnIniciarSesion"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginTop="28dp"
-                    android:text="Iniciar sesión"
+                    android:text="Iniciar Sesion"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:backgroundTint="#1976D2"
                     app:cornerRadius="14dp"
-                    app:icon="@android:drawable/ic_menu_send"
                     app:iconGravity="textStart"
                     app:iconPadding="10dp"
                     app:iconTint="#FFFFFF" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnRegistrarse"
+                    android:id="@+id/btnGoogle"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginTop="14dp"
-                    android:text="Crear cuenta"
+                    android:text="Entrar con Google"
                     android:textAllCaps="false"
                     android:textColor="#1976D2"
                     android:textSize="16sp"
@@ -120,10 +141,22 @@
                     app:cornerRadius="14dp"
                     app:strokeColor="#1976D2"
                     app:strokeWidth="2dp"
-                    app:icon="@android:drawable/ic_menu_add"
+                    app:icon="@android:drawable/ic_menu_search"
                     app:iconGravity="textStart"
                     app:iconPadding="10dp"
                     app:iconTint="#1976D2" />
+
+                <TextView
+                    android:id="@+id/txtIrRegistro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="22dp"
+                    android:padding="8dp"
+                    android:text="No tengo cuenta. Registrarme"
+                    android:textColor="#1976D2"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
