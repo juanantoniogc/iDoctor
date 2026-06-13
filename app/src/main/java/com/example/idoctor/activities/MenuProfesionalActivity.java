@@ -34,7 +34,7 @@ public class MenuProfesionalActivity extends AppCompatActivity {
         });
 
         vista.btnMisCitas.setOnClickListener(view -> {
-            Toast.makeText(this, "Mis citas se hara en una fase posterior", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, GenerarCitasActivity.class));
         });
 
         vista.btnCerrarSesion.setOnClickListener(view -> {
