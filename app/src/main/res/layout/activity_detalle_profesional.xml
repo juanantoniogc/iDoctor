@@ -10,13 +10,30 @@
         android:orientation="vertical"
         android:padding="20dp">
 
+        <ImageView
+            android:id="@+id/imgFotoProfesional"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="Foto del profesional"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/txtNombreProfesional"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
             android:textColor="@color/azul_principal"
             android:textSize="26sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtApellidos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/azul_principal"
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/txtEspecialidad"
@@ -35,26 +52,25 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/txtTelefono"
+            android:id="@+id/txtNumeroColegiado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:textColor="@android:color/black"
             android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/txtCorreo"
+        <Button
+            android:id="@+id/btnVerConsultas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/black"
-            android:textSize="15sp" />
+            android:layout_marginTop="28dp"
+            android:text="Ver consultas" />
 
         <Button
             android:id="@+id/btnVolver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="12dp"
             android:text="Volver" />
 
     </LinearLayout>

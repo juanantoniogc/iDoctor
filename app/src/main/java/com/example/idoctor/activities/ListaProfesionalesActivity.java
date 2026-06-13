@@ -71,6 +71,8 @@ public class ListaProfesionalesActivity extends AppCompatActivity {
         intent.putExtra("descripcion", profesional.getDescripcion());
         intent.putExtra("telefono", profesional.getTelefono());
         intent.putExtra("correo", profesional.getCorreo());
+        intent.putExtra("numeroColegiado", profesional.getNumeroColegiado());
+        intent.putExtra("foto", profesional.getFoto());
         startActivity(intent);
     }
 }
