@@ -1,8 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Idoctor" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.Idoctor" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/fondo_pantalla</item>
+        <item name="android:colorAccent">@color/azul_principal</item>
+        <item name="colorPrimary">@color/azul_principal</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/azul_principal</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/texto_principal</item>
+        <item name="materialButtonStyle">@style/Widget.IDoctor.Boton</item>
+        <item name="textInputStyle">@style/Widget.IDoctor.CampoTexto</item>
+        <item name="radioButtonStyle">@style/Widget.IDoctor.Radio</item>
+        <item name="materialCardViewStyle">@style/Widget.IDoctor.Tarjeta</item>
     </style>
 
     <style name="Theme.Idoctor" parent="Base.Theme.Idoctor" />

@@ -29,14 +29,14 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEditar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Editar" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEliminar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

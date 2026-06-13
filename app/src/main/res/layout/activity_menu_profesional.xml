@@ -16,28 +16,28 @@
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnMisConsultas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:text="Mis consultas" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnMisHorarios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Mis horarios" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnMisCitas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Mis citas" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCerrarSesion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

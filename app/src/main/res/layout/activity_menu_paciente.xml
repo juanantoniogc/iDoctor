@@ -16,28 +16,28 @@
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnVerProfesionales"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:text="Ver profesionales" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnVerCitas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Ver mis citas" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnVerEvaluaciones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Ver evaluaciones" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCerrarSesion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

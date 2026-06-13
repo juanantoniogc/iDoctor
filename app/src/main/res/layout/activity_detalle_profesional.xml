@@ -59,14 +59,14 @@
             android:textColor="@android:color/black"
             android:textSize="15sp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerConsultas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:text="Ver consultas" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVolver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

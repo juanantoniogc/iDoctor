@@ -46,14 +46,14 @@
         android:textColor="@color/texto_secundario"
         android:textSize="14sp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCrearEvaluacion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:text="Crear evaluacion" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnVolver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

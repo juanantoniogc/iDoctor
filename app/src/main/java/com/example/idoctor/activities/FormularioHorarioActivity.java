@@ -10,6 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.idoctor.dao.HorarioDao;
 import com.example.idoctor.databinding.ActivityFormularioHorarioBinding;
 import com.example.idoctor.models.Horario;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
+
+import java.util.Locale;
 
 public class FormularioHorarioActivity extends AppCompatActivity {
 
@@ -29,6 +33,7 @@ public class FormularioHorarioActivity extends AppCompatActivity {
         idHorario = getIntent().getStringExtra("idHorario");
 
         configurarDiasSemana();
+        configurarSelectoresHora();
         cargarDatosSiEdita();
 
         vista.btnGuardar.setOnClickListener(view -> guardarHorario());
@@ -36,10 +41,36 @@ public class FormularioHorarioActivity extends AppCompatActivity {
     }
 
     private void configurarDiasSemana() {
-        String[] diasSemana = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
-        ArrayAdapter<String> adaptador = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, diasSemana);
-        adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        String[] diasSemana = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"};
+        ArrayAdapter<String> adaptador = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, diasSemana);
         vista.spDiaSemana.setAdapter(adaptador);
+        vista.spDiaSemana.setText(diasSemana[0], false);
+    }
+
+    private void configurarSelectoresHora() {
+        vista.edtHoraInicio.setOnClickListener(view -> mostrarSelectorHora(true));
+        vista.edtHoraFin.setOnClickListener(view -> mostrarSelectorHora(false));
+    }
+
+    private void mostrarSelectorHora(boolean esHoraInicio) {
+        MaterialTimePicker selectorHora = new MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setHour(9)
+                .setMinute(0)
+                .setTitleText(esHoraInicio ? "Hora de inicio" : "Hora de fin")
+                .build();
+
+        selectorHora.addOnPositiveButtonClickListener(view -> {
+            String hora = String.format(Locale.getDefault(), "%02d:%02d", selectorHora.getHour(), selectorHora.getMinute());
+
+            if (esHoraInicio) {
+                vista.edtHoraInicio.setText(hora);
+            } else {
+                vista.edtHoraFin.setText(hora);
+            }
+        });
+
+        selectorHora.show(getSupportFragmentManager(), esHoraInicio ? "horaInicio" : "horaFin");
     }
 
     private void cargarDatosSiEdita() {
@@ -57,16 +88,16 @@ public class FormularioHorarioActivity extends AppCompatActivity {
             return;
         }
 
-        for (int i = 0; i < vista.spDiaSemana.getCount(); i++) {
-            if (diaSemana.equals(vista.spDiaSemana.getItemAtPosition(i).toString())) {
-                vista.spDiaSemana.setSelection(i);
+        for (int i = 0; i < vista.spDiaSemana.getAdapter().getCount(); i++) {
+            if (diaSemana.equals(vista.spDiaSemana.getAdapter().getItem(i).toString())) {
+                vista.spDiaSemana.setText(diaSemana, false);
                 return;
             }
         }
     }
 
     private void guardarHorario() {
-        String diaSemana = vista.spDiaSemana.getSelectedItem().toString();
+        String diaSemana = vista.spDiaSemana.getText().toString().trim();
         String horaInicio = vista.edtHoraInicio.getText().toString().trim();
         String horaFin = vista.edtHoraFin.getText().toString().trim();
 
@@ -75,8 +106,13 @@ public class FormularioHorarioActivity extends AppCompatActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(horaInicio) || TextUtils.isEmpty(horaFin)) {
-            Toast.makeText(this, "Rellena hora de inicio y hora de fin", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(diaSemana) || TextUtils.isEmpty(horaInicio) || TextUtils.isEmpty(horaFin)) {
+            Toast.makeText(this, "Rellena dia, hora de inicio y hora de fin", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (convertirHoraAMinutos(horaFin) <= convertirHoraAMinutos(horaInicio)) {
+            Toast.makeText(this, "La hora final no puede ser inferior o igual a la hora de inicio", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -89,5 +125,21 @@ public class FormularioHorarioActivity extends AppCompatActivity {
                 Toast.makeText(this, "No se pudo guardar el horario", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private int convertirHoraAMinutos(String hora) {
+        String[] partes = hora.split(":");
+
+        if (partes.length != 2) {
+            return -1;
+        }
+
+        try {
+            int horas = Integer.parseInt(partes[0]);
+            int minutos = Integer.parseInt(partes[1]);
+            return horas * 60 + minutos;
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 }

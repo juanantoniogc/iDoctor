@@ -81,9 +81,12 @@ public class GenerarCitasActivity extends AppCompatActivity {
             titulos.add(consulta.getTitulo());
         }
 
-        ArrayAdapter<String> adaptador = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, titulos);
-        adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adaptador = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, titulos);
         vista.spConsultas.setAdapter(adaptador);
+
+        if (!titulos.isEmpty()) {
+            vista.spConsultas.setText(titulos.get(0), false);
+        }
     }
 
     private void prepararGeneracion() {
@@ -112,8 +115,25 @@ public class GenerarCitasActivity extends AppCompatActivity {
             return;
         }
 
-        Consulta consulta = consultas.get(vista.spConsultas.getSelectedItemPosition());
+        Consulta consulta = obtenerConsultaSeleccionada();
+        if (consulta == null) {
+            Toast.makeText(this, "Selecciona una consulta", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         cargarHorariosParaGenerar(consulta, duracionMinutos);
+    }
+
+    private Consulta obtenerConsultaSeleccionada() {
+        String tituloSeleccionado = vista.spConsultas.getText().toString().trim();
+
+        for (Consulta consulta : consultas) {
+            if (tituloSeleccionado.equals(consulta.getTitulo())) {
+                return consulta;
+            }
+        }
+
+        return null;
     }
 
     private void cargarHorariosParaGenerar(Consulta consulta, int duracionMinutos) {
