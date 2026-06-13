@@ -47,6 +47,15 @@
             android:name=".activities.GenerarCitasActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.CitasDisponiblesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MisCitasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DetalleCitaActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RegistroActivity"
             android:exported="false" />
         <activity

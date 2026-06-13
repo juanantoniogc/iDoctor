@@ -1,6 +1,7 @@
 package com.example.idoctor.activities;
 
 import android.os.Bundle;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -38,7 +39,11 @@ public class ListaConsultasActivity extends AppCompatActivity {
     }
 
     private void configurarLista() {
-        adaptadorConsultas = new AdaptadorConsultas(consultas);
+        adaptadorConsultas = new AdaptadorConsultas(consultas, consulta -> {
+            Intent intent = new Intent(this, CitasDisponiblesActivity.class);
+            intent.putExtra("idConsulta", consulta.getId());
+            startActivity(intent);
+        });
         vista.rvConsultas.setLayoutManager(new LinearLayoutManager(this));
         vista.rvConsultas.setAdapter(adaptadorConsultas);
     }

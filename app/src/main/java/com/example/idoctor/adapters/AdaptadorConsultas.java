@@ -14,9 +14,11 @@ import java.util.List;
 public class AdaptadorConsultas extends RecyclerView.Adapter<AdaptadorConsultas.ConsultaViewHolder> {
 
     private final List<Consulta> consultas;
+    private final OnConsultaClickListener listener;
 
-    public AdaptadorConsultas(List<Consulta> consultas) {
+    public AdaptadorConsultas(List<Consulta> consultas, OnConsultaClickListener listener) {
         this.consultas = consultas;
+        this.listener = listener;
     }
 
     @NonNull
@@ -32,7 +34,7 @@ public class AdaptadorConsultas extends RecyclerView.Adapter<AdaptadorConsultas.
 
     @Override
     public void onBindViewHolder(@NonNull ConsultaViewHolder holder, int position) {
-        holder.mostrarConsulta(consultas.get(position));
+        holder.mostrarConsulta(consultas.get(position), listener);
     }
 
     @Override
@@ -49,11 +51,13 @@ public class AdaptadorConsultas extends RecyclerView.Adapter<AdaptadorConsultas.
             this.vista = vista;
         }
 
-        void mostrarConsulta(Consulta consulta) {
+        void mostrarConsulta(Consulta consulta, OnConsultaClickListener listener) {
             vista.txtTituloConsulta.setText(obtenerTexto(consulta.getTitulo()));
             vista.txtTelefono.setText("Telefono: " + obtenerTexto(consulta.getTelefono()));
             vista.txtCorreo.setText("Correo: " + obtenerTexto(consulta.getCorreo()));
             vista.txtUrl.setText("Web: " + obtenerTexto(consulta.getUrl()));
+
+            vista.getRoot().setOnClickListener(view -> listener.consultaPulsada(consulta));
         }
 
         private String obtenerTexto(String texto) {
@@ -63,5 +67,9 @@ public class AdaptadorConsultas extends RecyclerView.Adapter<AdaptadorConsultas.
 
             return texto;
         }
+    }
+
+    public interface OnConsultaClickListener {
+        void consultaPulsada(Consulta consulta);
     }
 }
