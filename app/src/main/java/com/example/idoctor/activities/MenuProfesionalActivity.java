@@ -34,7 +34,7 @@ public class MenuProfesionalActivity extends AppCompatActivity {
         });
 
         vista.btnMisCitas.setOnClickListener(view -> {
-            startActivity(new Intent(this, GenerarCitasActivity.class));
+            startActivity(new Intent(this, CitasProfesionalActivity.class));
         });
 
         vista.btnCerrarSesion.setOnClickListener(view -> {

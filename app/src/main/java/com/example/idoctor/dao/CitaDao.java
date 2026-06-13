@@ -125,6 +125,37 @@ public class CitaDao {
                 });
     }
 
+    public void obtenerCitasPorProfesional(String idProfesional, CitasListener listener) {
+        referenciaCitas
+                .orderByChild("professionalId")
+                .equalTo(idProfesional)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<Cita> citas = new ArrayList<>();
+
+                        for (DataSnapshot hijo : snapshot.getChildren()) {
+                            Cita cita = hijo.getValue(Cita.class);
+
+                            if (cita != null) {
+                                if (estaVacio(cita.getId())) {
+                                    cita.setId(hijo.getKey());
+                                }
+
+                                citas.add(cita);
+                            }
+                        }
+
+                        listener.citasEncontradas(citas);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        listener.error(error.getMessage());
+                    }
+                });
+    }
+
     public Task<Void> reservarCita(String idCita, String idPaciente) {
         Map<String, Object> datos = new HashMap<>();
         datos.put("patientId", idPaciente);
