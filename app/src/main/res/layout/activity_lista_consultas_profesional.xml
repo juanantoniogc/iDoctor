@@ -3,45 +3,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fondo_pantalla"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Zona profesional"
+        android:text="Mis consultas"
         android:textColor="@color/azul_principal"
-        android:textSize="28sp"
+        android:textSize="26sp"
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/btnMisConsultas"
+        android:id="@+id/btnNuevaConsulta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Mis consultas" />
+        android:layout_marginTop="16dp"
+        android:text="Nueva consulta" />
+
+    <TextView
+        android:id="@+id/txtSinConsultas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="No tienes consultas"
+        android:textColor="@color/texto_secundario"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvConsultas"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1" />
 
     <Button
-        android:id="@+id/btnMisHorarios"
+        android:id="@+id/btnVolver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Mis horarios" />
-
-    <Button
-        android:id="@+id/btnMisCitas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Mis citas" />
-
-    <Button
-        android:id="@+id/btnCerrarSesion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Cerrar sesion" />
+        android:text="Volver" />
 
 </LinearLayout>

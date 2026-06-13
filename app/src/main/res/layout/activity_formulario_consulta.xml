@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_pantalla">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Consulta"
+            android:textColor="@color/azul_principal"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Titulo"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Correo"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/edtTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Telefono"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/edtUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Url"
+            android:inputType="textUri" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="Direccion"
+            android:textColor="@color/azul_principal"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtCalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Calle"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtNumero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Numero"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtPiso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Piso"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtPortal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Portal"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtCiudad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ciudad"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtProvincia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Provincia"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtCodigoPostal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Codigo postal"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtPais"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Pais"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Guardar" />
+
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Cancelar" />
+
+    </LinearLayout>
+</ScrollView>

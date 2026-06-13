@@ -25,6 +25,18 @@ public class MenuProfesionalActivity extends AppCompatActivity {
         autenticacionDao = new AutenticacionDao();
         comprobarRolProfesional();
 
+        vista.btnMisConsultas.setOnClickListener(view -> {
+            startActivity(new Intent(this, ListaConsultasProfesionalActivity.class));
+        });
+
+        vista.btnMisHorarios.setOnClickListener(view -> {
+            Toast.makeText(this, "Mis horarios se hara en una fase posterior", Toast.LENGTH_SHORT).show();
+        });
+
+        vista.btnMisCitas.setOnClickListener(view -> {
+            Toast.makeText(this, "Mis citas se hara en una fase posterior", Toast.LENGTH_SHORT).show();
+        });
+
         vista.btnCerrarSesion.setOnClickListener(view -> {
             autenticacionDao.cerrarSesion();
             startActivity(new Intent(this, InicioSesionActivity.class));

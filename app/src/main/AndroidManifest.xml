@@ -32,6 +32,12 @@
             android:name=".activities.ListaConsultasActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.ListaConsultasProfesionalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FormularioConsultaActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RegistroActivity"
             android:exported="false" />
         <activity

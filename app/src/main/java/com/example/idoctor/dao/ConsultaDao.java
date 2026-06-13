@@ -3,6 +3,8 @@ package com.example.idoctor.dao;
 import androidx.annotation.NonNull;
 
 import com.example.idoctor.models.Consulta;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -13,9 +15,14 @@ import java.util.List;
 
 public class ConsultaDao {
 
+    private final DatabaseReference referenciaConsultas;
+
+    public ConsultaDao() {
+        referenciaConsultas = FirebaseDatabase.getInstance().getReference("consultations");
+    }
+
     public void obtenerConsultasPorProfesional(String idProfesional, ConsultasListener listener) {
-        FirebaseDatabase.getInstance()
-                .getReference("consultations")
+        referenciaConsultas
                 .orderByChild("professionalId")
                 .equalTo(idProfesional)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -42,6 +49,22 @@ public class ConsultaDao {
                         listener.error(error.getMessage());
                     }
                 });
+    }
+
+    public String crearIdConsulta() {
+        return referenciaConsultas.push().getKey();
+    }
+
+    public Task<Void> guardarConsulta(Consulta consulta) {
+        return referenciaConsultas
+                .child(consulta.getId())
+                .setValue(consulta);
+    }
+
+    public Task<Void> eliminarConsulta(String idConsulta) {
+        return referenciaConsultas
+                .child(idConsulta)
+                .removeValue();
     }
 
     public interface ConsultasListener {
