@@ -57,6 +57,7 @@ public class AdaptadorConsultasProfesional extends RecyclerView.Adapter<Adaptado
             vista.txtCorreo.setText("Correo: " + obtenerTexto(consulta.getCorreo()));
 
             vista.btnEditar.setOnClickListener(view -> listener.editarConsulta(consulta));
+            vista.btnHorarios.setOnClickListener(view -> listener.verHorarios(consulta));
             vista.btnEliminar.setOnClickListener(view -> listener.eliminarConsulta(consulta));
         }
 
@@ -71,6 +72,8 @@ public class AdaptadorConsultasProfesional extends RecyclerView.Adapter<Adaptado
 
     public interface OnConsultaClickListener {
         void editarConsulta(Consulta consulta);
+
+        void verHorarios(Consulta consulta);
 
         void eliminarConsulta(Consulta consulta);
     }

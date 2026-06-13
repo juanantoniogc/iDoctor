@@ -51,11 +51,12 @@ public class ConsultaDao {
                 });
     }
 
-    public String crearIdConsulta() {
-        return referenciaConsultas.push().getKey();
-    }
-
     public Task<Void> guardarConsulta(Consulta consulta) {
+        if (consulta.getId() == null || consulta.getId().isEmpty()) {
+            String key = referenciaConsultas.push().getKey();
+            consulta.setId(key);
+        }
+
         return referenciaConsultas
                 .child(consulta.getId())
                 .setValue(consulta);

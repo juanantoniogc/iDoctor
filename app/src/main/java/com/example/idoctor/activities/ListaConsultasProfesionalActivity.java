@@ -54,6 +54,11 @@ public class ListaConsultasProfesionalActivity extends AppCompatActivity {
             }
 
             @Override
+            public void verHorarios(Consulta consulta) {
+                abrirHorarios(consulta);
+            }
+
+            @Override
             public void eliminarConsulta(Consulta consulta) {
                 confirmarEliminarConsulta(consulta);
             }
@@ -114,6 +119,12 @@ public class ListaConsultasProfesionalActivity extends AppCompatActivity {
             }
         }
 
+        startActivity(intent);
+    }
+
+    private void abrirHorarios(Consulta consulta) {
+        Intent intent = new Intent(this, ListaHorariosActivity.class);
+        intent.putExtra("idConsulta", consulta.getId());
         startActivity(intent);
     }
 

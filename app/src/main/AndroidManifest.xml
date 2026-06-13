@@ -38,6 +38,12 @@
             android:name=".activities.FormularioConsultaActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.ListaHorariosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FormularioHorarioActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RegistroActivity"
             android:exported="false" />
         <activity

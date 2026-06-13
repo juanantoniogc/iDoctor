@@ -30,7 +30,7 @@ public class MenuProfesionalActivity extends AppCompatActivity {
         });
 
         vista.btnMisHorarios.setOnClickListener(view -> {
-            Toast.makeText(this, "Mis horarios se hara en una fase posterior", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, ListaConsultasProfesionalActivity.class));
         });
 
         vista.btnMisCitas.setOnClickListener(view -> {

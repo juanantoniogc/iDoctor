@@ -69,15 +69,6 @@ public class FormularioConsultaActivity extends AppCompatActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(idConsulta)) {
-            idConsulta = consultaDao.crearIdConsulta();
-        }
-
-        if (TextUtils.isEmpty(idConsulta)) {
-            Toast.makeText(this, "No se pudo crear la consulta", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         String idProfesional = autenticacionDao.obtenerUsuarioActual().getUid();
         Direccion direccion = crearDireccion();
         Consulta consulta = new Consulta(idConsulta, idProfesional, titulo, correo, telefono, url, direccion);
