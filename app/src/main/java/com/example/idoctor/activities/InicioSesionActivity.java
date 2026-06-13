@@ -9,9 +9,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.idoctor.MainActivity;
 import com.example.idoctor.dao.AutenticacionDao;
-import com.example.idoctor.databinding.ActivityLoginBinding;
+import com.example.idoctor.databinding.ActivityInicioSesionBinding;
 import com.example.idoctor.models.Usuario;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -24,21 +23,21 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class LoginActivity extends AppCompatActivity {
+public class InicioSesionActivity extends AppCompatActivity {
 
-    private ActivityLoginBinding vista;
+    private ActivityInicioSesionBinding vista;
     private AutenticacionDao autenticacionDao;
     private GoogleSignInClient clienteGoogle;
 
     private final ActivityResultLauncher<Intent> lanzadorGoogle =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result.getData() == null) {
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), resultado -> {
+                if (resultado.getData() == null) {
                     mostrarMensaje("No se recibieron datos de Google");
                     return;
                 }
 
                 try {
-                    GoogleSignInAccount cuentaGoogle = GoogleSignIn.getSignedInAccountFromIntent(result.getData())
+                    GoogleSignInAccount cuentaGoogle = GoogleSignIn.getSignedInAccountFromIntent(resultado.getData())
                             .getResult(ApiException.class);
                     iniciarSesionConCuentaGoogle(cuentaGoogle);
                 } catch (ApiException e) {
@@ -49,25 +48,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        vista = ActivityLoginBinding.inflate(getLayoutInflater());
+        vista = ActivityInicioSesionBinding.inflate(getLayoutInflater());
         setContentView(vista.getRoot());
 
         autenticacionDao = new AutenticacionDao();
-
-        GoogleSignInOptions opcionesGoogle = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(com.example.idoctor.R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        clienteGoogle = GoogleSignIn.getClient(this, opcionesGoogle);
+        configurarGoogle();
 
         vista.btnIniciarSesion.setOnClickListener(view -> iniciarSesionConCorreo());
-        vista.btnGoogle.setOnClickListener(view -> {
-            lanzadorGoogle.launch(clienteGoogle.getSignInIntent());
-        });
-        vista.txtIrRegistro.setOnClickListener(view -> {
-            startActivity(new Intent(this, RegisterActivity.class));
-        });
+        vista.btnGoogle.setOnClickListener(view -> lanzadorGoogle.launch(clienteGoogle.getSignInIntent()));
+        vista.txtIrRegistro.setOnClickListener(view -> startActivity(new Intent(this, RegistroActivity.class)));
     }
 
     @Override
@@ -76,6 +65,15 @@ public class LoginActivity extends AppCompatActivity {
         if (autenticacionDao.obtenerUsuarioActual() != null) {
             comprobarPerfilUsuario(autenticacionDao.obtenerUsuarioActual().getUid());
         }
+    }
+
+    private void configurarGoogle() {
+        GoogleSignInOptions opcionesGoogle = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(com.example.idoctor.R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        clienteGoogle = GoogleSignIn.getClient(this, opcionesGoogle);
     }
 
     private void iniciarSesionConCorreo() {
@@ -87,13 +85,13 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        autenticacionDao.iniciarSesionConCorreo(correo, contrasena).addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().getUser() != null) {
-                comprobarPerfilUsuario(task.getResult().getUser().getUid());
+        autenticacionDao.iniciarSesionConCorreo(correo, contrasena).addOnCompleteListener(tarea -> {
+            if (tarea.isSuccessful() && tarea.getResult().getUser() != null) {
+                comprobarPerfilUsuario(tarea.getResult().getUser().getUid());
                 return;
             }
 
-            mostrarErrorInicioSesion(task.getException());
+            mostrarErrorInicioSesion(tarea.getException());
         });
     }
 
@@ -105,11 +103,12 @@ public class LoginActivity extends AppCompatActivity {
 
         AuthCredential credencial = GoogleAuthProvider.getCredential(cuentaGoogle.getIdToken(), null);
 
-        autenticacionDao.iniciarSesionConGoogle(credencial).addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().getUser() != null) {
-                comprobarPerfilUsuario(task.getResult().getUser().getUid());
+        autenticacionDao.iniciarSesionConGoogle(credencial).addOnCompleteListener(tarea -> {
+            if (tarea.isSuccessful() && tarea.getResult().getUser() != null) {
+                comprobarPerfilUsuario(tarea.getResult().getUser().getUid());
                 return;
             }
+
             mostrarMensaje("Fallo en autenticacion con Google");
         });
     }
@@ -120,11 +119,14 @@ public class LoginActivity extends AppCompatActivity {
             public void usuarioEncontrado(Usuario usuario) {
                 if (usuario == null || TextUtils.isEmpty(usuario.getRol())) {
                     irACompletarPerfil();
-                } else {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("rol", usuario.getRol());
-                    startActivity(intent);
+                } else if ("patient".equals(usuario.getRol())) {
+                    startActivity(new Intent(InicioSesionActivity.this, MenuPacienteActivity.class));
                     finish();
+                } else if ("professional".equals(usuario.getRol())) {
+                    startActivity(new Intent(InicioSesionActivity.this, MenuProfesionalActivity.class));
+                    finish();
+                } else {
+                    mostrarMensaje("Rol no valido");
                 }
             }
 
@@ -137,15 +139,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void irACompletarPerfil() {
-        Intent intent = new Intent(this, CompleteProfileActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, CompletarPerfilActivity.class));
         finish();
-    }
-
-
-
-    private void mostrarMensaje(String mensaje) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
     }
 
     private void mostrarErrorInicioSesion(Exception excepcion) {
@@ -158,5 +153,9 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             mostrarMensaje("No se pudo iniciar sesion");
         }
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
     }
 }

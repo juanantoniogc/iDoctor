@@ -156,7 +156,7 @@
                     app:iconTint="#FFFFFF" />
 
                 <TextView
-                    android:id="@+id/txtIrLogin"
+                    android:id="@+id/txtIrInicioSesion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

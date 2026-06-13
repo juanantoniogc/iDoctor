@@ -8,25 +8,26 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.idoctor.dao.AutenticacionDao;
-import com.example.idoctor.databinding.ActivityRegisterBinding;
+import com.example.idoctor.databinding.ActivityRegistroBinding;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
-public class RegisterActivity extends AppCompatActivity {
-    private ActivityRegisterBinding vista;
+public class RegistroActivity extends AppCompatActivity {
+
+    private ActivityRegistroBinding vista;
     private AutenticacionDao autenticacionDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        vista = ActivityRegisterBinding.inflate(getLayoutInflater());
+        vista = ActivityRegistroBinding.inflate(getLayoutInflater());
         setContentView(vista.getRoot());
 
         autenticacionDao = new AutenticacionDao();
 
         vista.btnRegistrarse.setOnClickListener(view -> registrarUsuario());
-        vista.txtIrLogin.setOnClickListener(view -> finish());
+        vista.txtIrInicioSesion.setOnClickListener(view -> finish());
     }
 
     private void registrarUsuario() {
@@ -40,33 +41,28 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (!contrasena.equals(repetirContrasena)) {
-            mostrarMensaje("Las contraseñas no coinciden");
+            mostrarMensaje("Las contrasenas no coinciden");
             return;
         }
 
         if (contrasena.length() < 6) {
-            mostrarMensaje("La contraseñas debe tener al menos 6 caracteres");
+            mostrarMensaje("La contrasena debe tener al menos 6 caracteres");
             return;
         }
 
-        autenticacionDao.registrarConCorreo(correo, contrasena).addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult().getUser() != null) {
+        autenticacionDao.registrarConCorreo(correo, contrasena).addOnCompleteListener(tarea -> {
+            if (tarea.isSuccessful() && tarea.getResult().getUser() != null) {
                 mostrarMensaje("Usuario creado correctamente");
-                Intent intent = new Intent(this, CompleteProfileActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, CompletarPerfilActivity.class));
                 finish();
                 return;
             }
 
-            mostrarErrorRegistro(task.getException());
+            mostrarErrorRegistro(tarea.getException());
         });
-    }
-    private void mostrarMensaje(String mensaje) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
     }
 
     private void mostrarErrorRegistro(Exception excepcion) {
-
         if (excepcion instanceof FirebaseAuthUserCollisionException) {
             mostrarMensaje("Ese correo ya esta registrado");
         } else if (excepcion instanceof FirebaseAuthInvalidCredentialsException) {
@@ -76,5 +72,9 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             mostrarMensaje("No se pudo registrar la cuenta");
         }
+    }
+
+    private void mostrarMensaje(String mensaje) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
     }
 }
