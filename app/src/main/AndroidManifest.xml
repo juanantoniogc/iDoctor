@@ -65,6 +65,12 @@
             android:name=".activities.CrearEvaluacionActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.EvaluacionesPacienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DetalleEvaluacionActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RegistroActivity"
             android:exported="false" />
         <activity

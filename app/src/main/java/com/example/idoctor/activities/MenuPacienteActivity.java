@@ -33,6 +33,10 @@ public class MenuPacienteActivity extends AppCompatActivity {
             startActivity(new Intent(this, MisCitasActivity.class));
         });
 
+        vista.btnVerEvaluaciones.setOnClickListener(view -> {
+            startActivity(new Intent(this, EvaluacionesPacienteActivity.class));
+        });
+
         vista.btnCerrarSesion.setOnClickListener(view -> {
             autenticacionDao.cerrarSesion();
             startActivity(new Intent(this, InicioSesionActivity.class));
