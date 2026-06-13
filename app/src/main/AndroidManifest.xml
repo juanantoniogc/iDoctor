@@ -23,6 +23,12 @@
             android:name=".activities.MenuProfesionalActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.ListaProfesionalesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DetalleProfesionalActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RegistroActivity"
             android:exported="false" />
         <activity

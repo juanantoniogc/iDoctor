@@ -25,6 +25,14 @@ public class MenuPacienteActivity extends AppCompatActivity {
         autenticacionDao = new AutenticacionDao();
         comprobarRolPaciente();
 
+        vista.btnVerProfesionales.setOnClickListener(view -> {
+            startActivity(new Intent(this, ListaProfesionalesActivity.class));
+        });
+
+        vista.btnVerCitas.setOnClickListener(view -> {
+            Toast.makeText(this, "Mis citas se hara en una fase posterior", Toast.LENGTH_SHORT).show();
+        });
+
         vista.btnCerrarSesion.setOnClickListener(view -> {
             autenticacionDao.cerrarSesion();
             startActivity(new Intent(this, InicioSesionActivity.class));
