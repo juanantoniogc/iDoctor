@@ -99,7 +99,7 @@ public class CompletarPerfilActivity extends AppCompatActivity {
         Usuario usuario = new Usuario(id, correo, nombre, apellidos, foto, rol);
         usuarioDao.guardarUsuario(usuario).addOnCompleteListener(tarea -> {
             if (!tarea.isSuccessful()) {
-                mostrarMensaje("No se pudieron guardar los datos basicos");
+                mostrarMensaje(obtenerMensajeError("No se pudieron guardar los datos basicos", tarea.getException()));
                 return;
             }
 
@@ -159,7 +159,7 @@ public class CompletarPerfilActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MenuPacienteActivity.class));
                 finish();
             } else {
-                mostrarMensaje("No se pudo guardar el paciente");
+                mostrarMensaje(obtenerMensajeError("No se pudo guardar el paciente", tarea.getException()));
             }
         });
     }
@@ -178,12 +178,20 @@ public class CompletarPerfilActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MenuProfesionalActivity.class));
                 finish();
             } else {
-                mostrarMensaje("No se pudo guardar el profesional");
+                mostrarMensaje(obtenerMensajeError("No se pudo guardar el profesional", tarea.getException()));
             }
         });
     }
 
+    private String obtenerMensajeError(String mensaje, Exception excepcion) {
+        if (excepcion == null || excepcion.getMessage() == null) {
+            return mensaje;
+        }
+
+        return mensaje + ": " + excepcion.getMessage();
+    }
+
     private void mostrarMensaje(String mensaje) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
     }
 }
