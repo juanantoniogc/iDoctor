@@ -1,0 +1,214 @@
+PDF: Proyecto Evaluable – iDoctor - B.pdf
+PAGES: 7
+
+
+--- PAGE 1 ---
+   
+2º CFGS – Desarrollo de Aplicaciones Multiplataforma 
+Módulo Profesional: Programación Multimedia y Dispositivos Móviles 
+ 
+Departamento de Informática       Proyecto Evaluable 2.02 
+Programación Multimedia y Dispositivos Móviles 
+Pablo Carrillo 
+ Proyecto Evaluable 2.02 – iDoctor  
+Objetivos 
+● Desarrollar una aplicación Android funcional, planificando e implementando sistemas 
+de formularios e informes para gestionar datos en la aplicación.  
+● Generar documentación técnica que incluya manuales de usuarios y otros 
+documentos asociados a la aplicación. 
+Resultados de Aprendizaje y Criterios de Evaluación asociados 
+RA1 - Aplica tecnologías de desarrollo para dispositivos móviles evaluando sus 
+características y capacidades. 
+Criterios de evaluación: 
+a) Se han analizado las limitaciones que plantea la ejecución de aplicaciones en los 
+dispositivos móviles. 
+b) Se han identificado las tecnologías de desarrollo de aplicaciones para dispositivos 
+móviles. 
+c) Se han instalado, configurado y utilizado entornos de trabajo para el desarrollo de 
+aplicaciones para dispositivos móviles. 
+d) Se han identificado configuraciones que clasifican los dispositivos móviles en base 
+a sus características. 
+e) Se han descrito perfiles que establecen la relación entre el dispositivo y la aplicación.  
+f) Se ha analizado la estructura de aplicaciones existentes para dispositivos móviles 
+identificando las clases utilizadas. 
+g) Se han realizado modificaciones sobre aplicaciones existentes. 
+h) Se han utilizado emuladores para comprobar el funcionamiento de las aplicaciones. 
+RA2 - Desarrolla aplicaciones para dispositivos móviles analizando y empleando las 
+tecnologías y librerías específicas. 
+Criterios de evaluación: 
+c) Se han utilizado las clases necesarias para la conexión y comunicación con  
+dispositivos inalámbricos. 
+d) Se han utilizado las clases necesarias para el intercambio de mensajes de texto y 
+multimedia. 
+e) Se han utilizado las clases necesarias para establecer conexiones y comunicaciones 
+
+
+--- PAGE 2 ---
+   
+2º CFGS – Desarrollo de Aplicaciones Multiplataforma 
+Módulo Profesional: Programación Multimedia y Dispositivos Móviles 
+ 
+Departamento de Informática       Proyecto Evaluable 2.02 
+Programación Multimedia y Dispositivos Móviles 
+Pablo Carrillo 
+HTTP y HTTPS. 
+f) Se han utilizado las clases necesarias para establecer conexiones con almacenes 
+de datos garantizando la persistencia. 
+g) Se han realizado pruebas de interacción usuario -aplicación para optimizar las 
+aplicaciones desarrolladas a partir de emuladores. 
+h) Se han empaquetado y desplegado las aplicaciones desarrolladas en dispositivos 
+móviles reales. 
+i) Se han documentado los procesos necesarios para el desarrollo de las aplicaciones. 
+  
+
+
+--- PAGE 3 ---
+   
+2º CFGS – Desarrollo de Aplicaciones Multiplataforma 
+Módulo Profesional: Programación Multimedia y Dispositivos Móviles 
+ 
+Departamento de Informática       Proyecto Evaluable 2.02 
+Programación Multimedia y Dispositivos Móviles 
+Pablo Carrillo 
+Descripción del proyecto 
+El proyecto iDoctor es una aplicación de gestión diseñada para conectar usuarios con 
+profesionales de la salud. La aplicación proporcionará perfiles para doctores, fisioterapeutas 
+y dentistas, y permitirá a los usuarios buscar profesionales, ver sus horarios , realizar 
+reservas de citas, ver informes y valoraciones. 
+Con este proyecto buscamos crear una aplicación que simplifique la administración de las 
+consultas de salud y mejore la comunicación de los pacientes y los profesionales. 
+Se usará una base de datos en tiempo real, en concreto, Firebase Realtime Database. 
+Requisitos de información 
+Los requisitos de información son aquellos que nos indican la información que debemos 
+almacenar y la estructura de dicha información. Nuestra aplicación deberá almacenar datos 
+de: 
+• Usuario: nombre de usuario y contraseña. 
+• Profesional: nombre, apellidos, foto, número de colegiado, especialidad (General, 
+Fisioterapia u Odontología) , descripción, media de estrellas y número de 
+valoraciones. 
+• Paciente: nombre, apellidos, foto, email, teléfono y si tiene seguro médico o no. 
+• Consulta: dirección, ciudad, email, teléfono, teléfono auxiliar y observaciones. 
+• Horario: día de la semana (Lunes, Martes, Miércoles, Jueves, Viernes, Sábado y 
+Domingo), hora de inicio y hora de fin. 
+• Cita: fecha de la cita, hora de la cita y si está activa o no. 
+• Evaluación: descripción, exploración, tratamiento, fecha y hora de la evaluación. 
+Además, debemos almacenar un identificador de todas las entidades anteriores. 
+
+
+--- PAGE 4 ---
+   
+2º CFGS – Desarrollo de Aplicaciones Multiplataforma 
+Módulo Profesional: Programación Multimedia y Dispositivos Móviles 
+ 
+Departamento de Informática       Proyecto Evaluable 2.02 
+Programación Multimedia y Dispositivos Móviles 
+Pablo Carrillo 
+Requisitos funcionales 
+Los requisitos funcionales incidan las diferentes funcionalidades que debe realizar nuestra 
+aplicación: 
+Usuarios: 
+ Un usuario debe ser capaz de registrarse en la aplicación con el Rol de  Profesional 
+o Paciente. 
+ Un usuario debe ser capaz de entrar en la aplicación mediante su nombre de usuario 
+y contraseña. 
+ Un usuario logueado debe ser capaz de cerrar sesión. 
+Profesional: 
+ Un profesional debe ser capaz de gestionar sus consultas (listar, crear, editar y 
+eliminar). 
+ Un profesional debe ser capaz de gestionar el horario de sus consultas (listar, crear, 
+editar y eliminar). 
+ Un profesional debe ser capaz de gestionar sus citas (listar, crear, editar y eliminar). 
+ Un profesional debe ser capaz de realizar una evaluación de una cita médica. 
+ Un profesional debe ser capaz de listar todas las valoraciones que ha recibido y 
+verlas en detalle. 
+ Un profesional debe ser capaz de generar automáticamente las citas asociadas a 
+una de sus consultas de una semana o un mes. Para esta generación la aplicación 
+solicitará el tiempo medio de las consultas y en función el horario registrado de las 
+consultas generará las citas. Es decir, si una consulta tiene un horario de lunes a 
+viernes de 09:00 a 14:00 y el profesional indica que el tiempo medio es de 30 minutos 
+por consulta generará a partir de hoy, una cita cada media hora desde las 09:00 a 
+las 14:00 todos los lunes, martes, miércoles, jueves y viernes de todo el mes. 
+Paciente: 
+ Un paciente debe ser capaz de listar todos los profesionales de la aplicación y verlos 
+en detalle. 
+ Un paciente debe ser capaz de reservar una cita médica con algún profesional. 
+ Un paciente debe ser capaz de listar todas sus citas médicas. 
+
+
+--- PAGE 5 ---
+   
+2º CFGS – Desarrollo de Aplicaciones Multiplataforma 
+Módulo Profesional: Programación Multimedia y Dispositivos Móviles 
+ 
+Departamento de Informática       Proyecto Evaluable 2.02 
+Programación Multimedia y Dispositivos Móviles 
+Pablo Carrillo 
+ Un paciente debe ser capaz de ver en detalle sus citas médicas y cancelarla si la 
+fecha de la reserva no ha pasado. 
+ Un paciente debe ser capaz de ver las evaluaciones de sus citas médicas. 
+Requisitos no funcionales 
+Los requisitos no funcionales describen las funciones específicas que el sistema debe 
+realizar, se centran en cómo debe funcionar el sistema en términos de calidad, rendimiento, 
+seguridad y otras características importantes. 
+Los requisitos no funcionales que debe cumplir nuestra aplicación son los siguientes: 
+ Un usuario no registrado solo podrá registrarse como Profesional o como Paciente, 
+o loguearse mediante un nombre de usuario y contraseña. 
+ Un Profesional solo podrá crear citas asociados a sus consultas. 
+ Se debe de implementar un sistema de control de roles para gestionar los permisos 
+de acceso a las diferentes pantallas. 
+ Las contraseñas deben almacenarse cifradas. 
+Consideraciones 
+• Interfaz de usuario y diseño: 
+o Diseñar una interfaz de usuario atractiva y coherente en todas las actividades. 
+Considerar el uso de colores, tipografía y elementos gráficos. 
+o Elegir una paleta de colores que sea agradable y legible. 
+o Seleccionar una tipografía adecuada para el texto en la aplicación. 
+o Asegurarse de que los elementos de la interfaz, como botones y campos de 
+texto, tengan tamaños y espacios adecuados para una experiencia de usuario 
+cómoda. 
+o Considerar la inclusión de imágenes o iconos que mejoren la apariencia de la 
+aplicación. 
+• Diseño responsivo: 
+o Asegurarse de que la aplicación se vea bien en diferentes tamaños de pantalla 
+y orientaciones (vertical y horizontal). 
+
+
+--- PAGE 6 ---
+   
+2º CFGS – Desarrollo de Aplicaciones Multiplataforma 
+Módulo Profesional: Programación Multimedia y Dispositivos Móviles 
+ 
+Departamento de Informática       Proyecto Evaluable 2.02 
+Programación Multimedia y Dispositivos Móviles 
+Pablo Carrillo 
+• Buenas prácticas de programación: 
+o Seguir buenas prácticas de programación, incluyendo el uso de nombres de 
+variables y funciones descriptivas en inglés. 
+o Comentar su código de manera adecuada para explicar la lógica detrás de las 
+partes clave de la aplicación. 
+o Mantener un código limpio y organizado, utilizando sangrías y estructuras 
+lógicas coherentes. 
+o Modularizar su código en funciones o clases cuando sea apropiado para 
+mejorar la legibilidad y la reutilización del código. 
+• Entrega: 
+o Los alumnos/as deben presentar la aplicación completa, junto con el código 
+fuente en formato ZIP la URL de su proyecto en Gitlab/Github. 
+• Evaluación: 
+o Los alumnos/as serán evaluados en función de la funcionalidad de la 
+aplicación, la implementación correcta de los requisitos, la calidad del código 
+y el diseño de la interfaz de usuario. También se evaluará la capacidad de 
+búsqueda y solución de problemas. 
+ 
+
+
+--- PAGE 7 ---
+   
+2º CFGS – Desarrollo de Aplicaciones Multiplataforma 
+Módulo Profesional: Programación Multimedia y Dispositivos Móviles 
+ 
+Departamento de Informática       Proyecto Evaluable 2.02 
+Programación Multimedia y Dispositivos Móviles 
+Pablo Carrillo 
+Diagrama UML 
+ 
+

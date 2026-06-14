@@ -1,0 +1,57 @@
+PDF: Requisitos del Proyecto iDoctor.pdf
+PAGES: 6
+
+
+--- PAGE 1 ---
+PROYECTO IDOCTOR ---- FIREBASE
+
+
+
+--- PAGE 2 ---
+PARA ANDROID
+Firebase genera una key única y ordenada por tiempo.
+private final DatabaseReference databaseReference;
+public AppointmentService() {
+//En el nodo appointments
+    databaseReference = FirebaseDatabase.getInstance().getReference("appointments");}
+//Método que guarda un objeto appointment
+public void saveAppointmentT oFirebase(Appointment appointment) {
+    String key = databaseReference.push().getKey(); // Genera un ID único
+    if (key != null) {
+        appointment.setId(key); // Se lo añade al id
+        databaseReference.child(key).setValue(appointment); //apunta al nodo de la key y vuelca todos los datos del 
+objeto appointment
+    }
+}
+
+
+
+--- PAGE 3 ---
+ESTRUCTURA RECOMENDADA EN FIREBASE 
+(SEGÚN UML)
+T odo a nivel raíz, sin anidamientos profundos.
+{
+  "patients": {},
+  "professionals": {},
+  "consultations": {},
+  "appointments": {},
+  "evaluations": {},
+  "timetables": {}
+}
+
+
+--- PAGE 4 ---
+IMPORTANTE
+En Realtime Database, diseña el JSON según las 
+consultas, no según el diagrama.
+
+
+--- PAGE 5 ---
+ESTRUCTURA DEL PROYECTO
+
+
+
+--- PAGE 6 ---
+OTROS ASPECTOS EVALUABLES
+- Librería PICASSO
+- Multimedia 

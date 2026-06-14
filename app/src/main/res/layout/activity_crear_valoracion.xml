@@ -1,61 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fondo_pantalla">
+    android:background="#EAF6FF"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Valorar profesional"
-            android:textColor="@color/azul_principal"
-            android:textSize="26sp"
+            android:textColor="#1976D2"
+            android:textSize="34sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Puntúa tu experiencia con el profesional médico"
+            android:textColor="#607D8B"
+            android:textSize="16sp" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="34dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="7dp"
+            app:strokeColor="#D4E9FA"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="22dp">
 
                 <TextView
-                    android:id="@+id/txtDatosCita"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/texto_principal" />
+                    android:gravity="center"
+                    android:text="Datos de la valoración"
+                    android:textColor="#0D47A1"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:background="#F7FBFF"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:id="@+id/txtDatosCita"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#263238"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtDatosProfesional"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#607D8B"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginBottom="18dp"
+                    android:background="#E3F2FD" />
 
                 <TextView
-                    android:id="@+id/txtDatosProfesional"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/texto_principal" />
+                    android:gravity="center"
+                    android:text="Puntuación"
+                    android:textColor="#0D47A1"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
 
                 <RatingBar
                     android:id="@+id/ratingEstrellas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="14dp"
                     android:numStars="5"
+                    android:progressBackgroundTint="#E3F2FD"
+                    android:progressTint="#FFC107"
                     android:rating="5"
+                    android:secondaryProgressTint="#FFC107"
                     android:stepSize="1" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:hint="Comentario opcional">
+                    android:layout_marginTop="24dp"
+                    android:hint="Comentario opcional"
+                    app:boxBackgroundColor="#F7FBFF"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="14dp"
+                    app:boxCornerRadiusBottomStart="14dp"
+                    app:boxCornerRadiusTopEnd="14dp"
+                    app:boxCornerRadiusTopStart="14dp"
+                    app:boxStrokeColor="#1976D2"
+                    app:hintTextColor="#1976D2">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtComentario"
@@ -64,28 +132,43 @@
                         android:gravity="top"
                         android:inputType="textMultiLine"
                         android:minLines="3"
-                        android:textColor="@color/texto_principal" />
+                        android:textColor="#263238"
+                        android:textColorHint="#90A4AE" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnGuardarValoracion"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="Guardar valoracion" />
+                    android:layout_height="56dp"
+                    android:layout_marginTop="28dp"
+                    android:text="Guardar valoración"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#1976D2"
+                    app:cornerRadius="14dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnVolver"
-                    style="@style/Widget.IDoctor.BotonSecundario"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Volver" />
+                    android:layout_height="56dp"
+                    android:layout_marginTop="14dp"
+                    android:text="Volver"
+                    android:textAllCaps="false"
+                    android:textColor="#1976D2"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#FFFFFF"
+                    app:cornerRadius="14dp"
+                    app:strokeColor="#1976D2"
+                    app:strokeWidth="2dp" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
+
 </ScrollView>
