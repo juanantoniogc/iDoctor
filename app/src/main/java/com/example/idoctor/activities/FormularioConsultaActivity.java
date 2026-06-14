@@ -41,7 +41,9 @@ public class FormularioConsultaActivity extends AppCompatActivity {
         vista.edtTitulo.setText(getIntent().getStringExtra("titulo"));
         vista.edtCorreo.setText(getIntent().getStringExtra("correo"));
         vista.edtTelefono.setText(getIntent().getStringExtra("telefono"));
+        vista.edtTelefonoAuxiliar.setText(getIntent().getStringExtra("telefonoAuxiliar"));
         vista.edtUrl.setText(getIntent().getStringExtra("url"));
+        vista.edtObservaciones.setText(getIntent().getStringExtra("observaciones"));
         vista.edtCalle.setText(getIntent().getStringExtra("street"));
         vista.edtNumero.setText(getIntent().getStringExtra("number"));
         vista.edtPiso.setText(getIntent().getStringExtra("floor"));
@@ -62,7 +64,9 @@ public class FormularioConsultaActivity extends AppCompatActivity {
         String titulo = vista.edtTitulo.getText().toString().trim();
         String correo = vista.edtCorreo.getText().toString().trim();
         String telefono = vista.edtTelefono.getText().toString().trim();
+        String telefonoAuxiliar = vista.edtTelefonoAuxiliar.getText().toString().trim();
         String url = vista.edtUrl.getText().toString().trim();
+        String observaciones = vista.edtObservaciones.getText().toString().trim();
 
         if (TextUtils.isEmpty(titulo) || TextUtils.isEmpty(correo) || TextUtils.isEmpty(telefono)) {
             Toast.makeText(this, "Rellena titulo, correo y telefono", Toast.LENGTH_SHORT).show();
@@ -72,6 +76,8 @@ public class FormularioConsultaActivity extends AppCompatActivity {
         String idProfesional = autenticacionDao.obtenerUsuarioActual().getUid();
         Direccion direccion = crearDireccion();
         Consulta consulta = new Consulta(idConsulta, idProfesional, titulo, correo, telefono, url, direccion);
+        consulta.setTelefonoAuxiliar(telefonoAuxiliar);
+        consulta.setObservaciones(observaciones);
 
         consultaDao.guardarConsulta(consulta).addOnCompleteListener(tarea -> {
             if (tarea.isSuccessful()) {

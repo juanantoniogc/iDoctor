@@ -8,6 +8,8 @@ public class Consulta {
     private String titulo;
     private String correo;
     private String telefono;
+    private String telefonoAuxiliar;
+    private String observaciones;
     private String url;
     private String idProfesional;
     private Direccion direccion;
@@ -23,6 +25,8 @@ public class Consulta {
         this.titulo = titulo;
         this.correo = correo;
         this.telefono = telefono;
+        this.telefonoAuxiliar = "";
+        this.observaciones = "";
         this.url = url;
         this.direccion = direccion;
     }
@@ -63,6 +67,26 @@ public class Consulta {
     @PropertyName("phone")
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    @PropertyName("auxiliaryPhone")
+    public String getTelefonoAuxiliar() {
+        return telefonoAuxiliar;
+    }
+
+    @PropertyName("auxiliaryPhone")
+    public void setTelefonoAuxiliar(String telefonoAuxiliar) {
+        this.telefonoAuxiliar = telefonoAuxiliar;
+    }
+
+    @PropertyName("observations")
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    @PropertyName("observations")
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     public String getUrl() {

@@ -27,6 +27,8 @@ public class ProfesionalDao {
         datosProfesional.put("collegiateNumber", profesional.getNumeroColegiado());
         datosProfesional.put("specialty", profesional.getEspecialidad());
         datosProfesional.put("description", profesional.getDescripcion());
+        datosProfesional.put("averageStars", profesional.getMediaEstrellas());
+        datosProfesional.put("ratingsCount", profesional.getNumeroValoraciones());
 
         return FirebaseDatabase.getInstance()
                 .getReference("professionals")

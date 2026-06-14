@@ -63,8 +63,31 @@ public class EvaluacionDao {
                 });
     }
 
+    public void existeEvaluacionParaCita(String idCita, ExisteEvaluacionListener listener) {
+        referenciaEvaluaciones
+                .orderByChild("appointmentId")
+                .equalTo(idCita)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        listener.resultado(snapshot.exists());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        listener.error(error.getMessage());
+                    }
+                });
+    }
+
     public interface EvaluacionesListener {
         void evaluacionesEncontradas(List<Evaluacion> evaluaciones);
+
+        void error(String mensajeError);
+    }
+
+    public interface ExisteEvaluacionListener {
+        void resultado(boolean existe);
 
         void error(String mensajeError);
     }

@@ -31,6 +31,22 @@
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 
+    <TextView
+        android:id="@+id/txtTelefonoAuxiliar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/texto_secundario"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/txtObservaciones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/texto_secundario"
+        android:textSize="14sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

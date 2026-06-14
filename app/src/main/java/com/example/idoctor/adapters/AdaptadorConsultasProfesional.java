@@ -55,6 +55,8 @@ public class AdaptadorConsultasProfesional extends RecyclerView.Adapter<Adaptado
             vista.txtTituloConsulta.setText(obtenerTexto(consulta.getTitulo()));
             vista.txtTelefono.setText("Telefono: " + obtenerTexto(consulta.getTelefono()));
             vista.txtCorreo.setText("Correo: " + obtenerTexto(consulta.getCorreo()));
+            vista.txtTelefonoAuxiliar.setText("Telefono auxiliar: " + obtenerTexto(consulta.getTelefonoAuxiliar()));
+            vista.txtObservaciones.setText("Observaciones: " + obtenerTexto(consulta.getObservaciones()));
 
             vista.btnEditar.setOnClickListener(view -> listener.editarConsulta(consulta));
             vista.btnHorarios.setOnClickListener(view -> listener.verHorarios(consulta));

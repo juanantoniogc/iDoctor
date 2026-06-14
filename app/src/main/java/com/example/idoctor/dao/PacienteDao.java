@@ -19,6 +19,7 @@ public class PacienteDao {
         datosPaciente.put("photo", paciente.getFoto());
         datosPaciente.put("dni", paciente.getDni());
         datosPaciente.put("healthInsuranceNumber", paciente.getNumeroTarjetaSanitaria());
+        datosPaciente.put("hasHealthInsurance", paciente.isTieneSeguroMedico());
 
         return FirebaseDatabase.getInstance()
                 .getReference("patients")

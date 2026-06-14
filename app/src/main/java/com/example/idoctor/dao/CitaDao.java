@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.idoctor.models.Cita;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,10 +20,12 @@ import java.util.Set;
 
 public class CitaDao {
 
+    private final DatabaseReference referenciaBase;
     private final DatabaseReference referenciaCitas;
 
     public CitaDao() {
-        referenciaCitas = FirebaseDatabase.getInstance().getReference("appointments");
+        referenciaBase = FirebaseDatabase.getInstance().getReference();
+        referenciaCitas = referenciaBase.child("appointments");
     }
 
     public void obtenerClavesCitasPorConsulta(String idConsulta, CitasExistentesListener listener) {
@@ -156,6 +159,28 @@ public class CitaDao {
                 });
     }
 
+    public void obtenerCitaPorId(String idCita, CitaListener listener) {
+        referenciaCitas
+                .child(idCita)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Cita cita = snapshot.getValue(Cita.class);
+
+                        if (cita != null && estaVacio(cita.getId())) {
+                            cita.setId(snapshot.getKey());
+                        }
+
+                        listener.citaEncontrada(cita);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        listener.error(error.getMessage());
+                    }
+                });
+    }
+
     public Task<Void> reservarCita(String idCita, String idPaciente) {
         Map<String, Object> datos = new HashMap<>();
         datos.put("patientId", idPaciente);
@@ -172,6 +197,63 @@ public class CitaDao {
         return referenciaCitas.child(idCita).updateChildren(datos);
     }
 
+    public Task<Void> eliminarCitaConEvaluaciones(String idCita) {
+        TaskCompletionSource<Void> tarea = new TaskCompletionSource<>();
+        Map<String, Object> datosParaBorrar = new HashMap<>();
+        datosParaBorrar.put("appointments/" + idCita, null);
+
+        referenciaBase.child("evaluations")
+                .orderByChild("appointmentId")
+                .equalTo(idCita)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot hijo : snapshot.getChildren()) {
+                            datosParaBorrar.put("evaluations/" + hijo.getKey(), null);
+                        }
+
+                        borrarValoracionesDeCita(idCita, datosParaBorrar, tarea);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        tarea.setException(error.toException());
+                    }
+                });
+
+        return tarea.getTask();
+    }
+
+    private void borrarValoracionesDeCita(String idCita, Map<String, Object> datosParaBorrar,
+                                          TaskCompletionSource<Void> tarea) {
+        referenciaBase.child("ratings")
+                .orderByChild("appointmentId")
+                .equalTo(idCita)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot hijo : snapshot.getChildren()) {
+                            datosParaBorrar.put("ratings/" + hijo.getKey(), null);
+                        }
+
+                        referenciaBase.updateChildren(datosParaBorrar).addOnCompleteListener(resultado -> {
+                            if (resultado.isSuccessful()) {
+                                tarea.setResult(null);
+                            } else if (resultado.getException() != null) {
+                                tarea.setException(resultado.getException());
+                            } else {
+                                tarea.setException(new Exception("No se pudo eliminar la cita"));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        tarea.setException(error.toException());
+                    }
+                });
+    }
+
     private boolean estaVacio(String texto) {
         return texto == null || texto.trim().isEmpty();
     }
@@ -184,6 +266,12 @@ public class CitaDao {
 
     public interface CitasListener {
         void citasEncontradas(List<Cita> citas);
+
+        void error(String mensajeError);
+    }
+
+    public interface CitaListener {
+        void citaEncontrada(Cita cita);
 
         void error(String mensajeError);
     }

@@ -105,7 +105,9 @@ public class ListaConsultasProfesionalActivity extends AppCompatActivity {
             intent.putExtra("titulo", consulta.getTitulo());
             intent.putExtra("correo", consulta.getCorreo());
             intent.putExtra("telefono", consulta.getTelefono());
+            intent.putExtra("telefonoAuxiliar", consulta.getTelefonoAuxiliar());
             intent.putExtra("url", consulta.getUrl());
+            intent.putExtra("observaciones", consulta.getObservaciones());
 
             if (consulta.getDireccion() != null) {
                 intent.putExtra("street", consulta.getDireccion().getStreet());

@@ -13,6 +13,8 @@ public class Profesional {
     private String numeroColegiado;
     private String especialidad;
     private String descripcion;
+    private double mediaEstrellas;
+    private int numeroValoraciones;
 
     public Profesional() {
         // Constructor vacio necesario para Firebase Realtime Database.
@@ -29,6 +31,8 @@ public class Profesional {
         this.numeroColegiado = numeroColegiado;
         this.especialidad = especialidad;
         this.descripcion = descripcion;
+        this.mediaEstrellas = 0;
+        this.numeroValoraciones = 0;
     }
 
     public String getId() {
@@ -117,5 +121,25 @@ public class Profesional {
     @PropertyName("description")
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    @PropertyName("averageStars")
+    public double getMediaEstrellas() {
+        return mediaEstrellas;
+    }
+
+    @PropertyName("averageStars")
+    public void setMediaEstrellas(double mediaEstrellas) {
+        this.mediaEstrellas = mediaEstrellas;
+    }
+
+    @PropertyName("ratingsCount")
+    public int getNumeroValoraciones() {
+        return numeroValoraciones;
+    }
+
+    @PropertyName("ratingsCount")
+    public void setNumeroValoraciones(int numeroValoraciones) {
+        this.numeroValoraciones = numeroValoraciones;
     }
 }

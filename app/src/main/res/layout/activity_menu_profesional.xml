@@ -38,6 +38,13 @@
         android:text="Mis citas" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMisValoraciones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Mis valoraciones" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCerrarSesion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

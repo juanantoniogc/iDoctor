@@ -59,10 +59,22 @@
             android:name=".activities.CitasProfesionalActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.FormularioCitaActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.DetalleCitaProfesionalActivity"
             android:exported="false" />
         <activity
             android:name=".activities.CrearEvaluacionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.CrearValoracionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ListaValoracionesProfesionalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DetalleValoracionActivity"
             android:exported="false" />
         <activity
             android:name=".activities.EvaluacionesPacienteActivity"

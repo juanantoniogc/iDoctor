@@ -56,6 +56,8 @@ public class AdaptadorConsultas extends RecyclerView.Adapter<AdaptadorConsultas.
             vista.txtTelefono.setText("Telefono: " + obtenerTexto(consulta.getTelefono()));
             vista.txtCorreo.setText("Correo: " + obtenerTexto(consulta.getCorreo()));
             vista.txtUrl.setText("Web: " + obtenerTexto(consulta.getUrl()));
+            vista.txtTelefonoAuxiliar.setText("Telefono auxiliar: " + obtenerTexto(consulta.getTelefonoAuxiliar()));
+            vista.txtObservaciones.setText("Observaciones: " + obtenerTexto(consulta.getObservaciones()));
 
             vista.getRoot().setOnClickListener(view -> listener.consultaPulsada(consulta));
         }

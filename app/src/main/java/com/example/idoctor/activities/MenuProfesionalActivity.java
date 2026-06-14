@@ -37,6 +37,10 @@ public class MenuProfesionalActivity extends AppCompatActivity {
             startActivity(new Intent(this, CitasProfesionalActivity.class));
         });
 
+        vista.btnMisValoraciones.setOnClickListener(view -> {
+            startActivity(new Intent(this, ListaValoracionesProfesionalActivity.class));
+        });
+
         vista.btnCerrarSesion.setOnClickListener(view -> {
             autenticacionDao.cerrarSesion();
             startActivity(new Intent(this, InicioSesionActivity.class));

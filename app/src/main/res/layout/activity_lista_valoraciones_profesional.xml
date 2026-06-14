@@ -9,37 +9,23 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mis citas"
+        android:text="Mis valoraciones"
         android:textColor="@color/azul_principal"
         android:textSize="26sp"
         android:textStyle="bold" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnNuevaCita"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="Nueva cita" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnGenerarCitas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Generar citas" />
-
     <TextView
-        android:id="@+id/txtSinCitas"
+        android:id="@+id/txtSinValoraciones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="No hay citas para mostrar"
+        android:text="No hay valoraciones para mostrar"
         android:textColor="@color/texto_secundario"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCitasProfesional"
+        android:id="@+id/rvValoraciones"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"

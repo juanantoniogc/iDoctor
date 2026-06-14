@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,10 @@ import com.example.idoctor.models.Usuario;
 import com.google.firebase.auth.FirebaseUser;
 
 public class CompletarPerfilActivity extends AppCompatActivity {
+
+    private static final String ESPECIALIDAD_GENERAL = "General";
+    private static final String ESPECIALIDAD_FISIOTERAPIA = "Fisioterapia";
+    private static final String ESPECIALIDAD_ODONTOLOGIA = "Odontologia";
 
     private ActivityCompletarPerfilBinding vista;
     private AutenticacionDao autenticacionDao;
@@ -37,6 +42,7 @@ public class CompletarPerfilActivity extends AppCompatActivity {
         pacienteDao = new PacienteDao();
         profesionalDao = new ProfesionalDao();
 
+        configurarEspecialidades();
         mostrarCamposRol("");
 
         vista.rgRol.setOnCheckedChangeListener((group, idSeleccionado) -> {
@@ -59,6 +65,22 @@ public class CompletarPerfilActivity extends AppCompatActivity {
     private void mostrarCamposRol(String rol) {
         vista.layoutPaciente.setVisibility("patient".equals(rol) ? View.VISIBLE : View.GONE);
         vista.layoutProfesional.setVisibility("professional".equals(rol) ? View.VISIBLE : View.GONE);
+    }
+
+    private void configurarEspecialidades() {
+        String[] especialidades = {
+                ESPECIALIDAD_GENERAL,
+                ESPECIALIDAD_FISIOTERAPIA,
+                ESPECIALIDAD_ODONTOLOGIA
+        };
+
+        ArrayAdapter<String> adaptador = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                especialidades
+        );
+
+        vista.edtEspecialidad.setAdapter(adaptador);
     }
 
     private void guardarPerfil() {
@@ -145,7 +167,18 @@ public class CompletarPerfilActivity extends AppCompatActivity {
             return false;
         }
 
+        if (!especialidadValida(especialidad)) {
+            mostrarMensaje("Elige una especialidad valida");
+            return false;
+        }
+
         return true;
+    }
+
+    private boolean especialidadValida(String especialidad) {
+        return ESPECIALIDAD_GENERAL.equals(especialidad)
+                || ESPECIALIDAD_FISIOTERAPIA.equals(especialidad)
+                || ESPECIALIDAD_ODONTOLOGIA.equals(especialidad);
     }
 
     private void guardarPaciente(String id, String correo, String nombre, String apellidos,
@@ -154,6 +187,8 @@ public class CompletarPerfilActivity extends AppCompatActivity {
         String numeroTarjetaSanitaria = vista.edtNumeroTarjetaSanitaria.getText().toString().trim();
 
         Paciente paciente = new Paciente(id, nombre, apellidos, correo, telefono, foto, dni, numeroTarjetaSanitaria);
+        paciente.setTieneSeguroMedico(vista.cbTieneSeguroMedico.isChecked());
+
         pacienteDao.guardarPaciente(paciente).addOnCompleteListener(tarea -> {
             if (tarea.isSuccessful()) {
                 startActivity(new Intent(this, MenuPacienteActivity.class));

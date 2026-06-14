@@ -12,6 +12,7 @@ public class Paciente {
     private String foto;
     private String dni;
     private String numeroTarjetaSanitaria;
+    private boolean tieneSeguroMedico;
 
     public Paciente() {
         // Constructor vacio necesario para Firebase Realtime Database.
@@ -27,6 +28,7 @@ public class Paciente {
         this.foto = foto;
         this.dni = dni;
         this.numeroTarjetaSanitaria = numeroTarjetaSanitaria;
+        this.tieneSeguroMedico = false;
     }
 
     public String getId() {
@@ -103,5 +105,15 @@ public class Paciente {
     @PropertyName("healthInsuranceNumber")
     public void setNumeroTarjetaSanitaria(String numeroTarjetaSanitaria) {
         this.numeroTarjetaSanitaria = numeroTarjetaSanitaria;
+    }
+
+    @PropertyName("hasHealthInsurance")
+    public boolean isTieneSeguroMedico() {
+        return tieneSeguroMedico;
+    }
+
+    @PropertyName("hasHealthInsurance")
+    public void setTieneSeguroMedico(boolean tieneSeguroMedico) {
+        this.tieneSeguroMedico = tieneSeguroMedico;
     }
 }

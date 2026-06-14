@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.idoctor.adapters.AdaptadorCitas;
+import com.example.idoctor.adapters.AdaptadorCitasProfesional;
 import com.example.idoctor.dao.AutenticacionDao;
 import com.example.idoctor.dao.CitaDao;
 import com.example.idoctor.databinding.ActivityCitasProfesionalBinding;
@@ -22,7 +23,7 @@ public class CitasProfesionalActivity extends AppCompatActivity {
     private ActivityCitasProfesionalBinding vista;
     private AutenticacionDao autenticacionDao;
     private CitaDao citaDao;
-    private AdaptadorCitas adaptadorCitas;
+    private AdaptadorCitasProfesional adaptadorCitas;
     private List<Cita> citas;
 
     @Override
@@ -36,6 +37,10 @@ public class CitasProfesionalActivity extends AppCompatActivity {
         citas = new ArrayList<>();
 
         configurarLista();
+
+        vista.btnNuevaCita.setOnClickListener(view -> {
+            startActivity(new Intent(this, FormularioCitaActivity.class));
+        });
 
         vista.btnGenerarCitas.setOnClickListener(view -> {
             startActivity(new Intent(this, GenerarCitasActivity.class));
@@ -51,10 +56,21 @@ public class CitasProfesionalActivity extends AppCompatActivity {
     }
 
     private void configurarLista() {
-        adaptadorCitas = new AdaptadorCitas(citas, cita -> {
-            Intent intent = new Intent(this, DetalleCitaProfesionalActivity.class);
-            ponerDatosCita(intent, cita);
-            startActivity(intent);
+        adaptadorCitas = new AdaptadorCitasProfesional(citas, new AdaptadorCitasProfesional.OnCitaProfesionalClickListener() {
+            @Override
+            public void verDetalle(Cita cita) {
+                abrirDetalle(cita);
+            }
+
+            @Override
+            public void editarCita(Cita cita) {
+                abrirFormulario(cita);
+            }
+
+            @Override
+            public void eliminarCita(Cita cita) {
+                confirmarEliminarCita(cita);
+            }
         });
         vista.rvCitasProfesional.setLayoutManager(new LinearLayoutManager(this));
         vista.rvCitasProfesional.setAdapter(adaptadorCitas);
@@ -82,6 +98,39 @@ public class CitasProfesionalActivity extends AppCompatActivity {
             @Override
             public void error(String mensajeError) {
                 Toast.makeText(CitasProfesionalActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void abrirDetalle(Cita cita) {
+        Intent intent = new Intent(this, DetalleCitaProfesionalActivity.class);
+        ponerDatosCita(intent, cita);
+        startActivity(intent);
+    }
+
+    private void abrirFormulario(Cita cita) {
+        Intent intent = new Intent(this, FormularioCitaActivity.class);
+        ponerDatosCita(intent, cita);
+        intent.putExtra("activa", cita.isActiva());
+        startActivity(intent);
+    }
+
+    private void confirmarEliminarCita(Cita cita) {
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar cita")
+                .setMessage("Quieres eliminar esta cita?")
+                .setPositiveButton("Eliminar", (dialog, which) -> eliminarCita(cita))
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void eliminarCita(Cita cita) {
+        citaDao.eliminarCitaConEvaluaciones(cita.getId()).addOnCompleteListener(tarea -> {
+            if (tarea.isSuccessful()) {
+                Toast.makeText(this, "Cita eliminada", Toast.LENGTH_SHORT).show();
+                cargarCitas();
+            } else {
+                Toast.makeText(this, "No se pudo eliminar la cita", Toast.LENGTH_SHORT).show();
             }
         });
     }
