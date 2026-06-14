@@ -8,13 +8,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.idoctor.dao.AutenticacionDao;
+import com.example.idoctor.dao.ProfesionalDao;
 import com.example.idoctor.databinding.ActivityMenuProfesionalBinding;
+import com.example.idoctor.models.Profesional;
 import com.example.idoctor.models.Usuario;
+
+import java.util.Locale;
 
 public class MenuProfesionalActivity extends AppCompatActivity {
 
     private ActivityMenuProfesionalBinding vista;
     private AutenticacionDao autenticacionDao;
+    private ProfesionalDao profesionalDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +28,7 @@ public class MenuProfesionalActivity extends AppCompatActivity {
         setContentView(vista.getRoot());
 
         autenticacionDao = new AutenticacionDao();
+        profesionalDao = new ProfesionalDao();
         comprobarRolProfesional();
 
         vista.btnMisConsultas.setOnClickListener(view -> {
@@ -65,6 +71,9 @@ public class MenuProfesionalActivity extends AppCompatActivity {
                 } else if ("patient".equals(usuario.getRol())) {
                     startActivity(new Intent(MenuProfesionalActivity.this, MenuPacienteActivity.class));
                     finish();
+                } else {
+                    mostrarDatosUsuario(usuario);
+                    cargarDatosProfesional(idUsuario);
                 }
             }
 
@@ -73,5 +82,68 @@ public class MenuProfesionalActivity extends AppCompatActivity {
                 Toast.makeText(MenuProfesionalActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void mostrarDatosUsuario(Usuario usuario) {
+        String nombreCompleto = unirNombre(usuario.getNombre(), usuario.getApellidos());
+
+        vista.txtInicialProfesional.setText(obtenerInicial(nombreCompleto));
+        vista.txtNombreProfesional.setText(nombreCompleto);
+        vista.txtCorreoProfesional.setText("Correo: " + obtenerTexto(usuario.getCorreo()));
+        vista.txtRolProfesional.setText("Perfil profesional");
+    }
+
+    private void cargarDatosProfesional(String idUsuario) {
+        profesionalDao.obtenerProfesional(idUsuario, new ProfesionalDao.ProfesionalListener() {
+            @Override
+            public void profesionalEncontrado(Profesional profesional) {
+                if (profesional == null) {
+                    vista.txtTelefonoProfesional.setText("Telefono: --");
+                    vista.txtDatoProfesional.setText("Colegiado: --");
+                    vista.txtValoracionesProfesional.setText("Valoraciones: --");
+                    return;
+                }
+
+                vista.txtTelefonoProfesional.setText("Telefono: " + obtenerTexto(profesional.getTelefono()));
+                vista.txtDatoProfesional.setText("Colegiado: " + obtenerTexto(profesional.getNumeroColegiado())
+                        + " - " + obtenerTexto(profesional.getEspecialidad()));
+                vista.txtValoracionesProfesional.setText(String.format(Locale.getDefault(),
+                        "Valoraciones: %.1f estrellas (%d)",
+                        profesional.getMediaEstrellas(),
+                        profesional.getNumeroValoraciones()));
+            }
+
+            @Override
+            public void error(String mensajeError) {
+                Toast.makeText(MenuProfesionalActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String unirNombre(String nombre, String apellidos) {
+        String nombreSeguro = obtenerTexto(nombre);
+        String apellidosSeguro = obtenerTexto(apellidos);
+
+        if ("--".equals(nombreSeguro)) {
+            return apellidosSeguro;
+        }
+
+        if ("--".equals(apellidosSeguro)) {
+            return nombreSeguro;
+        }
+
+        return nombreSeguro + " " + apellidosSeguro;
+    }
+
+    private String obtenerInicial(String texto) {
+        if (TextUtils.isEmpty(texto) || "--".equals(texto)) {
+            return "P";
+        }
+
+        return texto.substring(0, 1).toUpperCase();
+    }
+
+    private String obtenerTexto(String texto) {
+        return TextUtils.isEmpty(texto) ? "--" : texto;
     }
 }

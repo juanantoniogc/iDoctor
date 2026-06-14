@@ -119,21 +119,6 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:hint="Foto opcional">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtFoto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textUri"
-                        android:textColor="@color/texto_principal" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
                 <LinearLayout
                     android:id="@+id/layoutPaciente"
                     android:layout_width="match_parent"
@@ -165,18 +150,11 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cbTieneSeguroMedico"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:text="Tiene seguro médico"
-                        android:textColor="@color/texto_principal" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="14dp"
                         android:hint="Número de tarjeta sanitaria">
 
                         <com.google.android.material.textfield.TextInputEditText

@@ -16,6 +16,7 @@ import com.example.idoctor.dao.ConsultaDao;
 import com.example.idoctor.databinding.ActivityFormularioCitaBinding;
 import com.example.idoctor.models.Cita;
 import com.example.idoctor.models.Consulta;
+import com.example.idoctor.validations.Validaciones;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,11 +48,18 @@ public class FormularioCitaActivity extends AppCompatActivity {
 
         cargarDatosSiEdita();
         cargarConsultas();
+        configurarLimpiezaErrores();
 
         vista.edtFecha.setOnClickListener(view -> elegirFecha());
         vista.edtHora.setOnClickListener(view -> elegirHora());
         vista.btnGuardar.setOnClickListener(view -> guardarCita());
         vista.btnCancelar.setOnClickListener(view -> finish());
+    }
+
+    private void configurarLimpiezaErrores() {
+        Validaciones.limpiarErrorAlCambiar(vista.spConsultas);
+        Validaciones.limpiarErrorAlCambiar(vista.edtFecha);
+        Validaciones.limpiarErrorAlCambiar(vista.edtHora);
     }
 
     private void cargarDatosSiEdita() {
@@ -168,19 +176,21 @@ public class FormularioCitaActivity extends AppCompatActivity {
         String fecha = vista.edtFecha.getText().toString().trim();
         String hora = vista.edtHora.getText().toString().trim();
 
-        if (consulta == null) {
-            Toast.makeText(this, "Elige una consulta", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        limpiarErrores();
 
-        if (TextUtils.isEmpty(fecha) || TextUtils.isEmpty(hora)) {
-            Toast.makeText(this, "Elige fecha y hora", Toast.LENGTH_SHORT).show();
+        if (!formularioValido(consulta, fecha, hora)) {
             return;
         }
 
         String idProfesional = autenticacionDao.obtenerUsuarioActual().getUid();
         String paciente = TextUtils.isEmpty(idPaciente) ? "" : idPaciente;
 
+        if (!TextUtils.isEmpty(paciente) && !Validaciones.idSimpleValido(paciente)) {
+            Toast.makeText(this, "El paciente no tiene un formato valido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        vista.btnGuardar.setEnabled(false);
         Cita cita = new Cita(
                 idCita,
                 consulta.getId(),
@@ -196,9 +206,46 @@ public class FormularioCitaActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cita guardada", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
+                vista.btnGuardar.setEnabled(true);
                 Toast.makeText(this, "No se pudo guardar la cita", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean formularioValido(Consulta consulta, String fecha, String hora) {
+        boolean valido = true;
+
+        if (consulta == null) {
+            vista.spConsultas.setError("Selecciona una consulta");
+            valido = false;
+        }
+
+        if (TextUtils.isEmpty(fecha)) {
+            vista.edtFecha.setError("La fecha es obligatoria");
+            valido = false;
+        } else if (!Validaciones.fechaValida(fecha)) {
+            vista.edtFecha.setError("La fecha debe tener formato yyyy-MM-dd");
+            valido = false;
+        } else if (!Validaciones.fechaNoPasada(fecha)) {
+            vista.edtFecha.setError("La fecha no puede ser anterior a hoy");
+            valido = false;
+        }
+
+        if (TextUtils.isEmpty(hora)) {
+            vista.edtHora.setError("La hora es obligatoria");
+            valido = false;
+        } else if (!Validaciones.horaValida(hora)) {
+            vista.edtHora.setError("La hora debe tener formato HH:mm");
+            valido = false;
+        }
+
+        return valido;
+    }
+
+    private void limpiarErrores() {
+        vista.spConsultas.setError(null);
+        vista.edtFecha.setError(null);
+        vista.edtHora.setError(null);
     }
 
     private Consulta obtenerConsultaSeleccionada() {

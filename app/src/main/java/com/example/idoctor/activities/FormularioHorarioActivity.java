@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.idoctor.dao.HorarioDao;
 import com.example.idoctor.databinding.ActivityFormularioHorarioBinding;
 import com.example.idoctor.models.Horario;
+import com.example.idoctor.validations.Validaciones;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
@@ -35,9 +36,16 @@ public class FormularioHorarioActivity extends AppCompatActivity {
         configurarDiasSemana();
         configurarSelectoresHora();
         cargarDatosSiEdita();
+        configurarLimpiezaErrores();
 
         vista.btnGuardar.setOnClickListener(view -> guardarHorario());
         vista.btnCancelar.setOnClickListener(view -> finish());
+    }
+
+    private void configurarLimpiezaErrores() {
+        Validaciones.limpiarErrorAlCambiar(vista.spDiaSemana);
+        Validaciones.limpiarErrorAlCambiar(vista.edtHoraInicio);
+        Validaciones.limpiarErrorAlCambiar(vista.edtHoraFin);
     }
 
     private void configurarDiasSemana() {
@@ -106,40 +114,81 @@ public class FormularioHorarioActivity extends AppCompatActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(diaSemana) || TextUtils.isEmpty(horaInicio) || TextUtils.isEmpty(horaFin)) {
-            Toast.makeText(this, "Rellena dia, hora de inicio y hora de fin", Toast.LENGTH_SHORT).show();
+        limpiarErrores();
+
+        if (!formularioValido(diaSemana, horaInicio, horaFin)) {
             return;
         }
 
-        if (convertirHoraAMinutos(horaFin) <= convertirHoraAMinutos(horaInicio)) {
-            Toast.makeText(this, "La hora final no puede ser inferior o igual a la hora de inicio", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+        vista.btnGuardar.setEnabled(false);
         Horario horario = new Horario(idHorario, idConsulta, diaSemana, horaInicio, horaFin);
         horarioDao.guardarHorario(horario).addOnCompleteListener(tarea -> {
             if (tarea.isSuccessful()) {
                 Toast.makeText(this, "Horario guardado", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
+                vista.btnGuardar.setEnabled(true);
                 Toast.makeText(this, "No se pudo guardar el horario", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private int convertirHoraAMinutos(String hora) {
-        String[] partes = hora.split(":");
+    private boolean formularioValido(String diaSemana, String horaInicio, String horaFin) {
+        boolean valido = true;
 
-        if (partes.length != 2) {
-            return -1;
+        if (TextUtils.isEmpty(diaSemana)) {
+            vista.spDiaSemana.setError("Selecciona un dia");
+            valido = false;
+        } else if (!diaValido(diaSemana)) {
+            vista.spDiaSemana.setError("Selecciona un dia valido");
+            valido = false;
         }
 
-        try {
-            int horas = Integer.parseInt(partes[0]);
-            int minutos = Integer.parseInt(partes[1]);
-            return horas * 60 + minutos;
-        } catch (NumberFormatException e) {
-            return -1;
+        if (TextUtils.isEmpty(horaInicio)) {
+            vista.edtHoraInicio.setError("La hora de inicio es obligatoria");
+            valido = false;
+        } else if (!Validaciones.horaValida(horaInicio)) {
+            vista.edtHoraInicio.setError("La hora debe tener formato HH:mm");
+            valido = false;
         }
+
+        if (TextUtils.isEmpty(horaFin)) {
+            vista.edtHoraFin.setError("La hora de fin es obligatoria");
+            valido = false;
+        } else if (!Validaciones.horaValida(horaFin)) {
+            vista.edtHoraFin.setError("La hora debe tener formato HH:mm");
+            valido = false;
+        }
+
+        if (Validaciones.horaValida(horaInicio) && Validaciones.horaValida(horaFin)) {
+            int inicio = Validaciones.horaAMinutos(horaInicio);
+            int fin = Validaciones.horaAMinutos(horaFin);
+
+            if (fin <= inicio) {
+                vista.edtHoraFin.setError("La hora de fin debe ser mayor que la de inicio");
+                valido = false;
+            } else if (fin - inicio < 10) {
+                vista.edtHoraFin.setError("El horario debe durar al menos 10 minutos");
+                valido = false;
+            }
+        }
+
+        return valido;
+    }
+
+    private boolean diaValido(String diaSemana) {
+        for (int i = 0; i < vista.spDiaSemana.getAdapter().getCount(); i++) {
+            if (diaSemana.equals(vista.spDiaSemana.getAdapter().getItem(i).toString())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void limpiarErrores() {
+        vista.spDiaSemana.setError(null);
+        vista.edtHoraInicio.setError(null);
+        vista.edtHoraFin.setError(null);
     }
 }

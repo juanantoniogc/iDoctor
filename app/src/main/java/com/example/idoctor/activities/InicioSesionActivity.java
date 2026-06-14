@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.idoctor.dao.AutenticacionDao;
 import com.example.idoctor.databinding.ActivityInicioSesionBinding;
 import com.example.idoctor.models.Usuario;
+import com.example.idoctor.validations.Validaciones;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,6 +42,9 @@ public class InicioSesionActivity extends AppCompatActivity {
                             .getResult(ApiException.class);
                     iniciarSesionConCuentaGoogle(cuentaGoogle);
                 } catch (ApiException e) {
+                    if (e.getStatusCode() == 12501) {
+                        return;
+                    }
                     mostrarMensaje("Error con Google. Codigo: " + e.getStatusCode());
                 }
             });
@@ -53,10 +57,16 @@ public class InicioSesionActivity extends AppCompatActivity {
 
         autenticacionDao = new AutenticacionDao();
         configurarGoogle();
+        configurarLimpiezaErrores();
 
         vista.btnIniciarSesion.setOnClickListener(view -> iniciarSesionConCorreo());
         vista.btnGoogle.setOnClickListener(view -> lanzadorGoogle.launch(clienteGoogle.getSignInIntent()));
         vista.txtIrRegistro.setOnClickListener(view -> startActivity(new Intent(this, RegistroActivity.class)));
+    }
+
+    private void configurarLimpiezaErrores() {
+        Validaciones.limpiarErrorAlCambiar(vista.edtCorreo);
+        Validaciones.limpiarErrorAlCambiar(vista.edtContrasena);
     }
 
     @Override
@@ -78,21 +88,51 @@ public class InicioSesionActivity extends AppCompatActivity {
 
     private void iniciarSesionConCorreo() {
         String correo = vista.edtCorreo.getText().toString().trim();
-        String contrasena = vista.edtContrasena.getText().toString().trim();
+        String contrasena = vista.edtContrasena.getText().toString();
 
-        if (TextUtils.isEmpty(correo) || TextUtils.isEmpty(contrasena)) {
-            mostrarMensaje("Rellena correo y contrasena");
+        limpiarErrores();
+
+        if (!formularioValido(correo, contrasena)) {
             return;
         }
 
+        vista.btnIniciarSesion.setEnabled(false);
         autenticacionDao.iniciarSesionConCorreo(correo, contrasena).addOnCompleteListener(tarea -> {
             if (tarea.isSuccessful() && tarea.getResult().getUser() != null) {
                 comprobarPerfilUsuario(tarea.getResult().getUser().getUid());
                 return;
             }
 
+            vista.btnIniciarSesion.setEnabled(true);
             mostrarErrorInicioSesion(tarea.getException());
         });
+    }
+
+    private boolean formularioValido(String correo, String contrasena) {
+        boolean valido = true;
+
+        if (TextUtils.isEmpty(correo)) {
+            vista.edtCorreo.setError("El email es obligatorio");
+            valido = false;
+        } else if (correo.contains(" ")) {
+            vista.edtCorreo.setError("El email no puede contener espacios");
+            valido = false;
+        } else if (!Validaciones.emailValido(correo)) {
+            vista.edtCorreo.setError("Introduce un email valido");
+            valido = false;
+        }
+
+        if (TextUtils.isEmpty(contrasena)) {
+            vista.edtContrasena.setError("La contrasena es obligatoria");
+            valido = false;
+        }
+
+        return valido;
+    }
+
+    private void limpiarErrores() {
+        vista.edtCorreo.setError(null);
+        vista.edtContrasena.setError(null);
     }
 
     private void iniciarSesionConCuentaGoogle(GoogleSignInAccount cuentaGoogle) {

@@ -1,6 +1,7 @@
 package com.example.idoctor.activities;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import com.example.idoctor.dao.EvaluacionDao;
 import com.example.idoctor.dao.ValoracionDao;
 import com.example.idoctor.databinding.ActivityCrearValoracionBinding;
 import com.example.idoctor.models.Valoracion;
+import com.example.idoctor.validations.Validaciones;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,9 +43,14 @@ public class CrearValoracionActivity extends AppCompatActivity {
 
         vista.txtDatosCita.setText("Cita: " + texto(idCita));
         vista.txtDatosProfesional.setText("Profesional: " + texto(idProfesional));
+        configurarLimpiezaErrores();
 
         vista.btnGuardarValoracion.setOnClickListener(view -> guardarValoracion());
         vista.btnVolver.setOnClickListener(view -> finish());
+    }
+
+    private void configurarLimpiezaErrores() {
+        Validaciones.limpiarErrorAlCambiar(vista.edtComentario);
     }
 
     private void guardarValoracion() {
@@ -70,7 +77,27 @@ public class CrearValoracionActivity extends AppCompatActivity {
             return;
         }
 
+        String comentario = vista.edtComentario.getText().toString().trim();
+        vista.edtComentario.setError(null);
+        if (!comentarioValido(comentario)) {
+            return;
+        }
+
+        vista.btnGuardarValoracion.setEnabled(false);
         comprobarEvaluacionYGuardar(idPacienteActual, estrellas);
+    }
+
+    private boolean comentarioValido(String comentario) {
+        if (TextUtils.isEmpty(comentario)) {
+            return true;
+        }
+
+        if (!Validaciones.textoEntre(comentario, 3, 300)) {
+            vista.edtComentario.setError("El comentario debe tener entre 3 y 300 caracteres");
+            return false;
+        }
+
+        return true;
     }
 
     private void comprobarEvaluacionYGuardar(String idPacienteActual, int estrellas) {
@@ -78,6 +105,7 @@ public class CrearValoracionActivity extends AppCompatActivity {
             @Override
             public void resultado(boolean existe) {
                 if (!existe) {
+                    vista.btnGuardarValoracion.setEnabled(true);
                     Toast.makeText(CrearValoracionActivity.this,
                             "Solo puedes valorar citas que tengan evaluacion",
                             Toast.LENGTH_LONG).show();
@@ -89,6 +117,7 @@ public class CrearValoracionActivity extends AppCompatActivity {
 
             @Override
             public void error(String mensajeError) {
+                vista.btnGuardarValoracion.setEnabled(true);
                 Toast.makeText(CrearValoracionActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
             }
         });
@@ -110,8 +139,10 @@ public class CrearValoracionActivity extends AppCompatActivity {
                 Toast.makeText(this, "Valoracion guardada", Toast.LENGTH_SHORT).show();
                 finish();
             } else if (tarea.getException() != null) {
+                vista.btnGuardarValoracion.setEnabled(true);
                 Toast.makeText(this, tarea.getException().getMessage(), Toast.LENGTH_LONG).show();
             } else {
+                vista.btnGuardarValoracion.setEnabled(true);
                 Toast.makeText(this, "No se pudo guardar la valoracion", Toast.LENGTH_SHORT).show();
             }
         });

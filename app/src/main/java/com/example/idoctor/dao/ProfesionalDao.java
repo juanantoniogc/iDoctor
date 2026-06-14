@@ -65,8 +65,35 @@ public class ProfesionalDao {
                 });
     }
 
+    public void obtenerProfesional(String idProfesional, ProfesionalListener listener) {
+        FirebaseDatabase.getInstance()
+                .getReference("professionals")
+                .child(idProfesional)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            listener.profesionalEncontrado(snapshot.getValue(Profesional.class));
+                        } else {
+                            listener.profesionalEncontrado(null);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        listener.error(error.getMessage());
+                    }
+                });
+    }
+
     public interface ProfesionalesListener {
         void profesionalesEncontrados(List<Profesional> profesionales);
+
+        void error(String mensajeError);
+    }
+
+    public interface ProfesionalListener {
+        void profesionalEncontrado(Profesional profesional);
 
         void error(String mensajeError);
     }

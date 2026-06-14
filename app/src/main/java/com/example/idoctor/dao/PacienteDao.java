@@ -1,8 +1,13 @@
 package com.example.idoctor.dao;
 
+import androidx.annotation.NonNull;
+
 import com.example.idoctor.models.Paciente;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,11 +24,37 @@ public class PacienteDao {
         datosPaciente.put("photo", paciente.getFoto());
         datosPaciente.put("dni", paciente.getDni());
         datosPaciente.put("healthInsuranceNumber", paciente.getNumeroTarjetaSanitaria());
-        datosPaciente.put("hasHealthInsurance", paciente.isTieneSeguroMedico());
 
         return FirebaseDatabase.getInstance()
                 .getReference("patients")
                 .child(paciente.getId())
                 .setValue(datosPaciente);
+    }
+
+    public void obtenerPaciente(String idPaciente, PacienteListener listener) {
+        FirebaseDatabase.getInstance()
+                .getReference("patients")
+                .child(idPaciente)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            listener.pacienteEncontrado(snapshot.getValue(Paciente.class));
+                        } else {
+                            listener.pacienteEncontrado(null);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        listener.error(error.getMessage());
+                    }
+                });
+    }
+
+    public interface PacienteListener {
+        void pacienteEncontrado(Paciente paciente);
+
+        void error(String mensajeError);
     }
 }

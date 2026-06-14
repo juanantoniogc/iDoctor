@@ -17,7 +17,10 @@ import com.example.idoctor.databinding.ActivityCompletarPerfilBinding;
 import com.example.idoctor.models.Paciente;
 import com.example.idoctor.models.Profesional;
 import com.example.idoctor.models.Usuario;
+import com.example.idoctor.validations.Validaciones;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Random;
 
 public class CompletarPerfilActivity extends AppCompatActivity {
 
@@ -43,6 +46,7 @@ public class CompletarPerfilActivity extends AppCompatActivity {
         profesionalDao = new ProfesionalDao();
 
         configurarEspecialidades();
+        configurarLimpiezaErrores();
         mostrarCamposRol("");
 
         vista.rgRol.setOnCheckedChangeListener((group, idSeleccionado) -> {
@@ -60,6 +64,17 @@ public class CompletarPerfilActivity extends AppCompatActivity {
         });
 
         vista.btnGuardarPerfil.setOnClickListener(view -> guardarPerfil());
+    }
+
+    private void configurarLimpiezaErrores() {
+        Validaciones.limpiarErrorAlCambiar(vista.edtNombre);
+        Validaciones.limpiarErrorAlCambiar(vista.edtApellidos);
+        Validaciones.limpiarErrorAlCambiar(vista.edtTelefono);
+        Validaciones.limpiarErrorAlCambiar(vista.edtDni);
+        Validaciones.limpiarErrorAlCambiar(vista.edtNumeroTarjetaSanitaria);
+        Validaciones.limpiarErrorAlCambiar(vista.edtNumeroColegiado);
+        Validaciones.limpiarErrorAlCambiar(vista.edtEspecialidad);
+        Validaciones.limpiarErrorAlCambiar(vista.edtDescripcion);
     }
 
     private void mostrarCamposRol(String rol) {
@@ -98,15 +113,10 @@ public class CompletarPerfilActivity extends AppCompatActivity {
         String nombre = vista.edtNombre.getText().toString().trim();
         String apellidos = vista.edtApellidos.getText().toString().trim();
         String telefono = vista.edtTelefono.getText().toString().trim();
-        String foto = vista.edtFoto.getText().toString().trim();
 
-        if (TextUtils.isEmpty(rol)) {
-            mostrarMensaje("Elige paciente o profesional");
-            return;
-        }
+        limpiarErrores();
 
-        if (TextUtils.isEmpty(nombre) || TextUtils.isEmpty(apellidos) || TextUtils.isEmpty(telefono)) {
-            mostrarMensaje("Rellena nombre, apellidos y telefono");
+        if (!datosComunesValidos(rol, nombre, apellidos, telefono)) {
             return;
         }
 
@@ -118,9 +128,12 @@ public class CompletarPerfilActivity extends AppCompatActivity {
             return;
         }
 
+        String foto = generarImagenPerfil();
         Usuario usuario = new Usuario(id, correo, nombre, apellidos, foto, rol);
+        vista.btnGuardarPerfil.setEnabled(false);
         usuarioDao.guardarUsuario(usuario).addOnCompleteListener(tarea -> {
             if (!tarea.isSuccessful()) {
+                vista.btnGuardarPerfil.setEnabled(true);
                 mostrarMensaje(obtenerMensajeError("No se pudieron guardar los datos basicos", tarea.getException()));
                 return;
             }
@@ -145,34 +158,102 @@ public class CompletarPerfilActivity extends AppCompatActivity {
         return "";
     }
 
+    private boolean datosComunesValidos(String rol, String nombre, String apellidos, String telefono) {
+        boolean valido = true;
+
+        if (TextUtils.isEmpty(rol)) {
+            mostrarMensaje("Elige paciente o profesional");
+            valido = false;
+        }
+
+        if (TextUtils.isEmpty(nombre)) {
+            vista.edtNombre.setError("El nombre es obligatorio");
+            valido = false;
+        } else if (!Validaciones.textoEntre(nombre, 2, 50)) {
+            vista.edtNombre.setError("El nombre debe tener entre 2 y 50 caracteres");
+            valido = false;
+        } else if (!Validaciones.soloLetrasEspaciosGuiones(nombre)) {
+            vista.edtNombre.setError("El nombre solo puede contener letras, espacios y guiones");
+            valido = false;
+        }
+
+        if (TextUtils.isEmpty(apellidos)) {
+            vista.edtApellidos.setError("Los apellidos son obligatorios");
+            valido = false;
+        } else if (!Validaciones.textoEntre(apellidos, 2, 50)) {
+            vista.edtApellidos.setError("Los apellidos deben tener entre 2 y 50 caracteres");
+            valido = false;
+        } else if (!Validaciones.soloLetrasEspaciosGuiones(apellidos)) {
+            vista.edtApellidos.setError("Los apellidos solo pueden contener letras, espacios y guiones");
+            valido = false;
+        }
+
+        if (TextUtils.isEmpty(telefono)) {
+            vista.edtTelefono.setError("El telefono es obligatorio");
+            valido = false;
+        } else if (!Validaciones.telefonoValido(telefono)) {
+            vista.edtTelefono.setError("El telefono no tiene un formato valido");
+            valido = false;
+        }
+
+        return valido;
+    }
+
     private boolean datosPacienteValidos() {
         String dni = vista.edtDni.getText().toString().trim();
         String numeroTarjetaSanitaria = vista.edtNumeroTarjetaSanitaria.getText().toString().trim();
+        boolean valido = true;
 
-        if (TextUtils.isEmpty(dni) || TextUtils.isEmpty(numeroTarjetaSanitaria)) {
-            mostrarMensaje("Rellena DNI y numero de tarjeta sanitaria");
-            return false;
+        if (TextUtils.isEmpty(dni)) {
+            vista.edtDni.setError("El DNI es obligatorio");
+            valido = false;
+        } else if (!Validaciones.dniValido(dni)) {
+            vista.edtDni.setError("El DNI no es valido");
+            valido = false;
         }
 
-        return true;
+        if (TextUtils.isEmpty(numeroTarjetaSanitaria)) {
+            vista.edtNumeroTarjetaSanitaria.setError("La tarjeta sanitaria es obligatoria");
+            valido = false;
+        } else if (!Validaciones.textoEntre(numeroTarjetaSanitaria, 6, 30)) {
+            vista.edtNumeroTarjetaSanitaria.setError("La tarjeta sanitaria debe tener entre 6 y 30 caracteres");
+            valido = false;
+        }
+
+        return valido;
     }
 
     private boolean datosProfesionalValidos() {
         String numeroColegiado = vista.edtNumeroColegiado.getText().toString().trim();
         String especialidad = vista.edtEspecialidad.getText().toString().trim();
         String descripcion = vista.edtDescripcion.getText().toString().trim();
+        boolean valido = true;
 
-        if (TextUtils.isEmpty(numeroColegiado) || TextUtils.isEmpty(especialidad) || TextUtils.isEmpty(descripcion)) {
-            mostrarMensaje("Rellena numero de colegiado, especialidad y descripcion");
-            return false;
+        if (TextUtils.isEmpty(numeroColegiado)) {
+            vista.edtNumeroColegiado.setError("El numero de colegiado es obligatorio");
+            valido = false;
+        } else if (!Validaciones.numeroColegiadoValido(numeroColegiado)) {
+            vista.edtNumeroColegiado.setError("Usa entre 4 y 30 caracteres: letras, numeros y guiones");
+            valido = false;
         }
 
-        if (!especialidadValida(especialidad)) {
-            mostrarMensaje("Elige una especialidad valida");
-            return false;
+        if (TextUtils.isEmpty(especialidad)) {
+            vista.edtEspecialidad.setError("La especialidad es obligatoria");
+            valido = false;
+        } else if (!especialidadValida(especialidad)) {
+            vista.edtEspecialidad.setError("Elige una especialidad valida");
+            valido = false;
         }
 
-        return true;
+        if (TextUtils.isEmpty(descripcion)) {
+            vista.edtDescripcion.setError("La descripcion es obligatoria");
+            valido = false;
+        } else if (!Validaciones.textoEntre(descripcion, 20, 500)) {
+            vista.edtDescripcion.setError("La descripcion debe tener entre 20 y 500 caracteres");
+            valido = false;
+        }
+
+        return valido;
     }
 
     private boolean especialidadValida(String especialidad) {
@@ -181,19 +262,34 @@ public class CompletarPerfilActivity extends AppCompatActivity {
                 || ESPECIALIDAD_ODONTOLOGIA.equals(especialidad);
     }
 
+    private String generarImagenPerfil() {
+        return "https://randomuser.me/api/portraits/men/" + new Random().nextInt(100) + ".jpg";
+    }
+
+    private void limpiarErrores() {
+        vista.edtNombre.setError(null);
+        vista.edtApellidos.setError(null);
+        vista.edtTelefono.setError(null);
+        vista.edtDni.setError(null);
+        vista.edtNumeroTarjetaSanitaria.setError(null);
+        vista.edtNumeroColegiado.setError(null);
+        vista.edtEspecialidad.setError(null);
+        vista.edtDescripcion.setError(null);
+    }
+
     private void guardarPaciente(String id, String correo, String nombre, String apellidos,
                                  String telefono, String foto) {
         String dni = vista.edtDni.getText().toString().trim();
         String numeroTarjetaSanitaria = vista.edtNumeroTarjetaSanitaria.getText().toString().trim();
 
         Paciente paciente = new Paciente(id, nombre, apellidos, correo, telefono, foto, dni, numeroTarjetaSanitaria);
-        paciente.setTieneSeguroMedico(vista.cbTieneSeguroMedico.isChecked());
 
         pacienteDao.guardarPaciente(paciente).addOnCompleteListener(tarea -> {
             if (tarea.isSuccessful()) {
                 startActivity(new Intent(this, MenuPacienteActivity.class));
                 finish();
             } else {
+                vista.btnGuardarPerfil.setEnabled(true);
                 mostrarMensaje(obtenerMensajeError("No se pudo guardar el paciente", tarea.getException()));
             }
         });
@@ -213,6 +309,7 @@ public class CompletarPerfilActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MenuProfesionalActivity.class));
                 finish();
             } else {
+                vista.btnGuardarPerfil.setEnabled(true);
                 mostrarMensaje(obtenerMensajeError("No se pudo guardar el profesional", tarea.getException()));
             }
         });

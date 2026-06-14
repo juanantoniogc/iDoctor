@@ -15,6 +15,7 @@ import com.example.idoctor.databinding.ActivityGenerarCitasBinding;
 import com.example.idoctor.models.Cita;
 import com.example.idoctor.models.Consulta;
 import com.example.idoctor.models.Horario;
+import com.example.idoctor.validations.Validaciones;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,9 +47,15 @@ public class GenerarCitasActivity extends AppCompatActivity {
         consultas = new ArrayList<>();
 
         cargarConsultas();
+        configurarLimpiezaErrores();
 
         vista.btnGenerarCitas.setOnClickListener(view -> prepararGeneracion());
         vista.btnVolver.setOnClickListener(view -> finish());
+    }
+
+    private void configurarLimpiezaErrores() {
+        Validaciones.limpiarErrorAlCambiar(vista.spConsultas);
+        Validaciones.limpiarErrorAlCambiar(vista.edtDuracion);
     }
 
     private void cargarConsultas() {
@@ -96,8 +103,15 @@ public class GenerarCitasActivity extends AppCompatActivity {
         }
 
         String duracionTexto = vista.edtDuracion.getText().toString().trim();
+        limpiarErrores();
+
         if (TextUtils.isEmpty(duracionTexto)) {
-            Toast.makeText(this, "Indica la duracion media", Toast.LENGTH_SHORT).show();
+            vista.edtDuracion.setError("La duracion es obligatoria");
+            return;
+        }
+
+        if (!duracionTexto.matches("^[0-9]+$")) {
+            vista.edtDuracion.setError("La duracion debe ser un numero");
             return;
         }
 
@@ -106,21 +120,22 @@ public class GenerarCitasActivity extends AppCompatActivity {
         try {
             duracionMinutos = Integer.parseInt(duracionTexto);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "La duracion debe ser un numero", Toast.LENGTH_SHORT).show();
+            vista.edtDuracion.setError("La duracion debe ser un numero");
             return;
         }
 
-        if (duracionMinutos <= 0) {
-            Toast.makeText(this, "La duracion debe ser mayor que 0", Toast.LENGTH_SHORT).show();
+        if (duracionMinutos < 5 || duracionMinutos > 240) {
+            vista.edtDuracion.setError("La duracion debe estar entre 5 y 240 minutos");
             return;
         }
 
         Consulta consulta = obtenerConsultaSeleccionada();
         if (consulta == null) {
-            Toast.makeText(this, "Selecciona una consulta", Toast.LENGTH_SHORT).show();
+            vista.spConsultas.setError("Selecciona una consulta");
             return;
         }
 
+        vista.btnGenerarCitas.setEnabled(false);
         cargarHorariosParaGenerar(consulta, duracionMinutos);
     }
 
@@ -141,6 +156,7 @@ public class GenerarCitasActivity extends AppCompatActivity {
             @Override
             public void horariosEncontrados(List<Horario> horarios) {
                 if (horarios.isEmpty()) {
+                    vista.btnGenerarCitas.setEnabled(true);
                     Toast.makeText(GenerarCitasActivity.this, "La consulta no tiene horarios", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -150,6 +166,7 @@ public class GenerarCitasActivity extends AppCompatActivity {
 
             @Override
             public void error(String mensajeError) {
+                vista.btnGenerarCitas.setEnabled(true);
                 Toast.makeText(GenerarCitasActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
             }
         });
@@ -164,6 +181,7 @@ public class GenerarCitasActivity extends AppCompatActivity {
 
             @Override
             public void error(String mensajeError) {
+                vista.btnGenerarCitas.setEnabled(true);
                 Toast.makeText(GenerarCitasActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
             }
         });
@@ -220,6 +238,7 @@ public class GenerarCitasActivity extends AppCompatActivity {
 
     private void guardarCitas(List<Cita> citas, ResumenGeneracion resumen) {
         if (citas.isEmpty()) {
+            vista.btnGenerarCitas.setEnabled(true);
             mostrarMotivoSinCitas(resumen);
             return;
         }
@@ -235,10 +254,16 @@ public class GenerarCitasActivity extends AppCompatActivity {
                         finish();
                     }
                 } else {
+                    vista.btnGenerarCitas.setEnabled(true);
                     Toast.makeText(this, "No se pudo guardar una cita", Toast.LENGTH_SHORT).show();
                 }
             });
         }
+    }
+
+    private void limpiarErrores() {
+        vista.spConsultas.setError(null);
+        vista.edtDuracion.setError(null);
     }
 
     private void mostrarMotivoSinCitas(ResumenGeneracion resumen) {

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.idoctor.dao.EvaluacionDao;
 import com.example.idoctor.databinding.ActivityCrearEvaluacionBinding;
 import com.example.idoctor.models.Evaluacion;
+import com.example.idoctor.validations.Validaciones;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,9 +33,16 @@ public class CrearEvaluacionActivity extends AppCompatActivity {
 
         vista.txtDatosCita.setText("Cita: " + obtenerTexto(idCita));
         vista.txtDatosPaciente.setText("Paciente: " + obtenerTexto(idPaciente));
+        configurarLimpiezaErrores();
 
         vista.btnGuardarEvaluacion.setOnClickListener(view -> guardarEvaluacion());
         vista.btnVolver.setOnClickListener(view -> finish());
+    }
+
+    private void configurarLimpiezaErrores() {
+        Validaciones.limpiarErrorAlCambiar(vista.edtDescripcion);
+        Validaciones.limpiarErrorAlCambiar(vista.edtExploracion);
+        Validaciones.limpiarErrorAlCambiar(vista.edtTratamiento);
     }
 
     private void guardarEvaluacion() {
@@ -47,11 +55,13 @@ public class CrearEvaluacionActivity extends AppCompatActivity {
             return;
         }
 
-        if (descripcion.isEmpty() || exploracion.isEmpty() || tratamiento.isEmpty()) {
-            Toast.makeText(this, "Rellena todos los campos", Toast.LENGTH_SHORT).show();
+        limpiarErrores();
+
+        if (!formularioValido(descripcion, exploracion, tratamiento)) {
             return;
         }
 
+        vista.btnGuardarEvaluacion.setEnabled(false);
         Evaluacion evaluacion = new Evaluacion(
                 "",
                 idCita,
@@ -67,9 +77,37 @@ public class CrearEvaluacionActivity extends AppCompatActivity {
                 Toast.makeText(this, "Evaluacion guardada", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
+                vista.btnGuardarEvaluacion.setEnabled(true);
                 Toast.makeText(this, "No se pudo guardar la evaluacion", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean formularioValido(String descripcion, String exploracion, String tratamiento) {
+        boolean valido = true;
+
+        if (!Validaciones.textoEntre(descripcion, 20, 1000)) {
+            vista.edtDescripcion.setError("La descripcion debe tener entre 20 y 1000 caracteres");
+            valido = false;
+        }
+
+        if (!Validaciones.textoEntre(exploracion, 20, 1000)) {
+            vista.edtExploracion.setError("La exploracion debe tener entre 20 y 1000 caracteres");
+            valido = false;
+        }
+
+        if (!Validaciones.textoEntre(tratamiento, 20, 1000)) {
+            vista.edtTratamiento.setError("El tratamiento debe tener entre 20 y 1000 caracteres");
+            valido = false;
+        }
+
+        return valido;
+    }
+
+    private void limpiarErrores() {
+        vista.edtDescripcion.setError(null);
+        vista.edtExploracion.setError(null);
+        vista.edtTratamiento.setError(null);
     }
 
     private String obtenerMomentoActual() {
