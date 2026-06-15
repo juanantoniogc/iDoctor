@@ -86,6 +86,7 @@
         app:backgroundTint="#FFFFFF"
         app:cornerRadius="14dp"
         app:strokeColor="#1976D2"
-        app:strokeWidth="2dp" />
+        app:strokeWidth="2dp"
+        android:layout_marginBottom="40dp"/>
 
 </LinearLayout>

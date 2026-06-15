@@ -102,7 +102,8 @@ public class MenuProfesionalActivity extends AppCompatActivity {
                     vista.txtTelefonoProfesional.setText("Telefono: --");
                     vista.txtDatoProfesional.setText("Colegiado: --");
                     vista.txtEspecialidadProfesional.setText("Especialidad: --");
-                    vista.txtValoracionesProfesional.setText("Valoraciones: --");
+                    vista.ratingValoracionesProfesional.setRating(0);
+                    vista.txtValoracionesProfesional.setText("--");
                     vista.txtDescripcionProfesional.setText("Descripcion: --");
                     return;
                 }
@@ -111,8 +112,9 @@ public class MenuProfesionalActivity extends AppCompatActivity {
                 vista.txtTelefonoProfesional.setText("Telefono: " + obtenerTexto(profesional.getTelefono()));
                 vista.txtDatoProfesional.setText("Colegiado: " + obtenerTexto(profesional.getNumeroColegiado()));
                 vista.txtEspecialidadProfesional.setText("Especialidad: " + obtenerTexto(profesional.getEspecialidad()));
+                vista.ratingValoracionesProfesional.setRating((float) profesional.getMediaEstrellas());
                 vista.txtValoracionesProfesional.setText(String.format(Locale.getDefault(),
-                        "Valoraciones: %.1f estrellas (%d)",
+                        "%.1f de 5 estrellas (%d valoraciones)",
                         profesional.getMediaEstrellas(),
                         profesional.getNumeroValoraciones()));
                 vista.txtDescripcionProfesional.setText("Descripcion: " + obtenerTexto(profesional.getDescripcion()));

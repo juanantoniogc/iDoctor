@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.idoctor.databinding.ActivityDetalleProfesionalBinding;
 import com.squareup.picasso.Picasso;
 
+import java.util.Locale;
+
 public class DetalleProfesionalActivity extends AppCompatActivity {
 
     private ActivityDetalleProfesionalBinding vista;
@@ -34,12 +36,19 @@ public class DetalleProfesionalActivity extends AppCompatActivity {
         String descripcion = getIntent().getStringExtra("descripcion");
         String numeroColegiado = getIntent().getStringExtra("numeroColegiado");
         String foto = getIntent().getStringExtra("foto");
+        double mediaEstrellas = getIntent().getDoubleExtra("mediaEstrellas", 0);
+        int numeroValoraciones = getIntent().getIntExtra("numeroValoraciones", 0);
 
         vista.txtNombreProfesional.setText(valorTexto(nombre));
         vista.txtApellidos.setText(valorTexto(apellidos));
         vista.txtEspecialidad.setText(valorTexto(especialidad));
         vista.txtDescripcion.setText(valorTexto(descripcion));
         vista.txtNumeroColegiado.setText("Numero de colegiado: " + valorTexto(numeroColegiado));
+        vista.ratingValoracionesProfesional.setRating((float) mediaEstrellas);
+        vista.txtValoracionesProfesional.setText(String.format(Locale.getDefault(),
+                "%.1f de 5 estrellas (%d valoraciones)",
+                mediaEstrellas,
+                numeroValoraciones));
 
         if (TextUtils.isEmpty(foto)) {
             vista.imgFotoProfesional.setVisibility(View.GONE);

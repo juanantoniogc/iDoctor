@@ -84,6 +84,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:backgroundTint="#1976D2"
-        app:cornerRadius="14dp" />
+        app:cornerRadius="14dp"
+        android:layout_marginBottom="40dp"/>
 
 </LinearLayout>

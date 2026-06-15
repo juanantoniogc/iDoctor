@@ -73,6 +73,8 @@ public class ListaProfesionalesActivity extends AppCompatActivity {
         intent.putExtra("correo", profesional.getCorreo());
         intent.putExtra("numeroColegiado", profesional.getNumeroColegiado());
         intent.putExtra("foto", profesional.getFoto());
+        intent.putExtra("mediaEstrellas", profesional.getMediaEstrellas());
+        intent.putExtra("numeroValoraciones", profesional.getNumeroValoraciones());
         startActivity(intent);
     }
 }
