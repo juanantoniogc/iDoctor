@@ -18,13 +18,28 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/txtEstrellas"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#0D47A1"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RatingBar
+                android:id="@+id/ratingEstrellas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressBackgroundTint="#B0BEC5"
+                android:progressTint="#FFC107"
+                android:rating="0"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:secondaryProgressTint="#FFC107"
+                android:stepSize="1"
+                android:transformPivotX="0dp" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/txtComentario"

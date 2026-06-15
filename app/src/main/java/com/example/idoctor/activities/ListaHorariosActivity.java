@@ -15,6 +15,7 @@ import com.example.idoctor.databinding.ActivityListaHorariosBinding;
 import com.example.idoctor.models.Horario;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ListaHorariosActivity extends AppCompatActivity {
@@ -77,6 +78,19 @@ public class ListaHorariosActivity extends AppCompatActivity {
         horarioDao.obtenerHorariosPorConsulta(idConsulta, new HorarioDao.HorariosListener() {
             @Override
             public void horariosEncontrados(List<Horario> horariosEncontrados) {
+                Collections.sort(horariosEncontrados, (primero, segundo) -> {
+                    int comparacionDia = Integer.compare(
+                            posicionDia(primero.getDiaSemana()),
+                            posicionDia(segundo.getDiaSemana())
+                    );
+
+                    if (comparacionDia != 0) {
+                        return comparacionDia;
+                    }
+
+                    return textoSeguro(primero.getHoraInicio()).compareTo(textoSeguro(segundo.getHoraInicio()));
+                });
+
                 horarios.clear();
                 horarios.addAll(horariosEncontrados);
                 adaptadorHorarios.notifyDataSetChanged();
@@ -88,6 +102,37 @@ public class ListaHorariosActivity extends AppCompatActivity {
                 Toast.makeText(ListaHorariosActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private int posicionDia(String diaSemana) {
+        if (diaSemana == null) {
+            return 99;
+        }
+
+        switch (diaSemana.trim().toLowerCase()) {
+            case "lunes":
+                return 1;
+            case "martes":
+                return 2;
+            case "miercoles":
+            case "miércoles":
+                return 3;
+            case "jueves":
+                return 4;
+            case "viernes":
+                return 5;
+            case "sabado":
+            case "sábado":
+                return 6;
+            case "domingo":
+                return 7;
+            default:
+                return 99;
+        }
+    }
+
+    private String textoSeguro(String texto) {
+        return texto == null ? "" : texto;
     }
 
     private void abrirFormulario(Horario horario) {

@@ -8,7 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.idoctor.dao.AutenticacionDao;
 import com.example.idoctor.dao.CitaDao;
+import com.example.idoctor.dao.ConsultaDao;
+import com.example.idoctor.dao.ProfesionalDao;
 import com.example.idoctor.databinding.ActivityDetalleCitaBinding;
+import com.example.idoctor.models.Consulta;
+import com.example.idoctor.models.Profesional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,8 +25,13 @@ public class DetalleCitaActivity extends AppCompatActivity {
     private ActivityDetalleCitaBinding vista;
     private AutenticacionDao autenticacionDao;
     private CitaDao citaDao;
+    private ConsultaDao consultaDao;
+    private ProfesionalDao profesionalDao;
     private String idCita;
     private String fecha;
+    private String hora;
+    private String idConsulta;
+    private String idProfesional;
     private String modo;
 
     @Override
@@ -33,6 +42,8 @@ public class DetalleCitaActivity extends AppCompatActivity {
 
         autenticacionDao = new AutenticacionDao();
         citaDao = new CitaDao();
+        consultaDao = new ConsultaDao();
+        profesionalDao = new ProfesionalDao();
 
         recogerDatos();
         mostrarDatos();
@@ -44,13 +55,56 @@ public class DetalleCitaActivity extends AppCompatActivity {
     private void recogerDatos() {
         idCita = getIntent().getStringExtra("idCita");
         fecha = getIntent().getStringExtra("fecha");
+        hora = getIntent().getStringExtra("hora");
+        idConsulta = getIntent().getStringExtra("idConsulta");
+        idProfesional = getIntent().getStringExtra("idProfesional");
         modo = getIntent().getStringExtra("modo");
     }
 
     private void mostrarDatos() {
-        vista.txtFecha.setText("Fecha: " + obtenerTexto(fecha));
-        vista.txtHora.setText("Hora: " + obtenerTexto(getIntent().getStringExtra("hora")));
-        vista.txtIdConsulta.setText("Consulta: " + obtenerTexto(getIntent().getStringExtra("idConsulta")));
+        vista.txtNombreConsulta.setText("Cargando consulta...");
+        vista.txtNombreProfesional.setText("Cargando profesional...");
+        vista.txtFechaHora.setText(formatearFechaHora(fecha, hora));
+        cargarNombreConsulta();
+        cargarNombreProfesional();
+    }
+
+    private void cargarNombreConsulta() {
+        if (idConsulta == null || idConsulta.trim().isEmpty()) {
+            vista.txtNombreConsulta.setText("Sin datos");
+            return;
+        }
+
+        consultaDao.obtenerConsulta(idConsulta, new ConsultaDao.ConsultaListener() {
+            @Override
+            public void consultaEncontrada(Consulta consulta) {
+                vista.txtNombreConsulta.setText(obtenerTexto(consulta == null ? null : consulta.getTitulo()));
+            }
+
+            @Override
+            public void error(String mensajeError) {
+                vista.txtNombreConsulta.setText("Sin datos");
+            }
+        });
+    }
+
+    private void cargarNombreProfesional() {
+        if (idProfesional == null || idProfesional.trim().isEmpty()) {
+            vista.txtNombreProfesional.setText("Sin datos");
+            return;
+        }
+
+        profesionalDao.obtenerProfesional(idProfesional, new ProfesionalDao.ProfesionalListener() {
+            @Override
+            public void profesionalEncontrado(Profesional profesional) {
+                vista.txtNombreProfesional.setText(nombreCompleto(profesional));
+            }
+
+            @Override
+            public void error(String mensajeError) {
+                vista.txtNombreProfesional.setText("Sin datos");
+            }
+        });
     }
 
     private void configurarBotonAccion() {
@@ -86,11 +140,18 @@ public class DetalleCitaActivity extends AppCompatActivity {
         citaDao.reservarCita(idCita, idPaciente).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "Cita reservada", Toast.LENGTH_SHORT).show();
-                finish();
+                volverAlMenuPaciente();
             } else {
                 Toast.makeText(this, "No se pudo reservar la cita", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void volverAlMenuPaciente() {
+        Intent intent = new Intent(this, MenuPacienteActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
     }
 
     private void cancelarCita() {
@@ -146,5 +207,33 @@ public class DetalleCitaActivity extends AppCompatActivity {
         }
 
         return texto;
+    }
+
+    private String nombreCompleto(Profesional profesional) {
+        if (profesional == null) {
+            return "Sin datos";
+        }
+
+        String nombre = profesional.getNombre() == null ? "" : profesional.getNombre().trim();
+        String apellidos = profesional.getApellidos() == null ? "" : profesional.getApellidos().trim();
+        String nombreCompleto = (nombre + " " + apellidos).trim();
+        return nombreCompleto.isEmpty() ? "Sin datos" : nombreCompleto;
+    }
+
+    private String formatearFechaHora(String fecha, String hora) {
+        String horaTexto = obtenerTexto(hora);
+        SimpleDateFormat entrada = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat salida = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
+        entrada.setLenient(false);
+
+        try {
+            Date fechaParseada = entrada.parse(fecha);
+            if (fechaParseada == null) {
+                return obtenerTexto(fecha) + " a las " + horaTexto;
+            }
+            return salida.format(fechaParseada) + " a las " + horaTexto;
+        } catch (ParseException e) {
+            return obtenerTexto(fecha) + " a las " + horaTexto;
+        }
     }
 }

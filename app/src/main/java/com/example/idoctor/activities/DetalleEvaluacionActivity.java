@@ -36,8 +36,6 @@ public class DetalleEvaluacionActivity extends AppCompatActivity {
     }
 
     private void mostrarDatos() {
-        vista.txtMomento.setText("Fecha: " + obtenerTexto(getIntent().getStringExtra("momento")));
-        vista.txtIdCita.setText("Cita: " + obtenerTexto(idCita));
         vista.txtDescripcion.setText(obtenerTexto(getIntent().getStringExtra("descripcion")));
         vista.txtExploracion.setText(obtenerTexto(getIntent().getStringExtra("exploracion")));
         vista.txtTratamiento.setText(obtenerTexto(getIntent().getStringExtra("tratamiento")));

@@ -120,7 +120,36 @@ public class FormularioHorarioActivity extends AppCompatActivity {
             return;
         }
 
+        comprobarDiaYGuardar(diaSemana, horaInicio, horaFin);
+    }
+
+    private void comprobarDiaYGuardar(String diaSemana, String horaInicio, String horaFin) {
         vista.btnGuardar.setEnabled(false);
+
+        horarioDao.existeHorarioParaDia(idConsulta, diaSemana, idHorario, new HorarioDao.ExisteHorarioListener() {
+            @Override
+            public void resultado(boolean existe) {
+                if (existe) {
+                    vista.btnGuardar.setEnabled(true);
+                    vista.spDiaSemana.setError("Ya existe un horario para este dia");
+                    Toast.makeText(FormularioHorarioActivity.this,
+                            "Esta consulta ya tiene horario para " + diaSemana,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                guardarHorarioEnFirebase(diaSemana, horaInicio, horaFin);
+            }
+
+            @Override
+            public void error(String mensajeError) {
+                vista.btnGuardar.setEnabled(true);
+                Toast.makeText(FormularioHorarioActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void guardarHorarioEnFirebase(String diaSemana, String horaInicio, String horaFin) {
         Horario horario = new Horario(idHorario, idConsulta, diaSemana, horaInicio, horaFin);
         horarioDao.guardarHorario(horario).addOnCompleteListener(tarea -> {
             if (tarea.isSuccessful()) {

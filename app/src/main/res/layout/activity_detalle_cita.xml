@@ -65,7 +65,7 @@
                     android:padding="14dp">
 
                     <TextView
-                        android:id="@+id/txtFecha"
+                        android:id="@+id/txtNombreConsulta"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="#0D47A1"
@@ -73,13 +73,21 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/txtHora"
+                        android:id="@+id/txtNombreProfesional"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:textColor="#263238"
                         android:textSize="16sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtFechaHora"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#607D8B"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -89,14 +97,6 @@
                     android:layout_marginTop="22dp"
                     android:layout_marginBottom="18dp"
                     android:background="#E3F2FD" />
-
-                <TextView
-                    android:id="@+id/txtIdConsulta"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#607D8B"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAccionCita"

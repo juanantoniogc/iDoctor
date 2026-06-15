@@ -27,6 +27,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="46dp"
                 android:layout_height="46dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="#E3F2FD"
                 app:cardCornerRadius="23dp"
                 app:cardElevation="0dp"
@@ -45,7 +46,6 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -82,21 +82,6 @@
             android:paddingBottom="10dp"
             android:textColor="#263238"
             android:textSize="15sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="10dp"
-            android:background="#E3F2FD" />
-
-        <TextView
-            android:id="@+id/txtIdCita"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#607D8B"
-            android:textSize="14sp"
-            android:textStyle="bold" />
 
     </LinearLayout>
 

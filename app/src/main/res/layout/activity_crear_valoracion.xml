@@ -60,7 +60,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
-                    android:background="#F7FBFF"
                     android:orientation="vertical"
                     android:padding="14dp">
 
@@ -105,7 +104,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="14dp"
                     android:numStars="5"
-                    android:progressBackgroundTint="#E3F2FD"
+                    android:progressBackgroundTint="#B0BEC5"
                     android:progressTint="#FFC107"
                     android:rating="5"
                     android:secondaryProgressTint="#FFC107"

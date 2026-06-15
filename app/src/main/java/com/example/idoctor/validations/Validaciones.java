@@ -153,10 +153,6 @@ public class Validaciones {
         return !TextUtils.isEmpty(numero) && NUMERO_DIRECCION.matcher(numero).matches();
     }
 
-    public static boolean urlWebValida(String url) {
-        return TextUtils.isEmpty(url) || url.startsWith("http://") || url.startsWith("https://");
-    }
-
     public static boolean idSimpleValido(String id) {
         return !TextUtils.isEmpty(id) && id.trim().equals(id) && ID_SIMPLE.matcher(id).matches();
     }

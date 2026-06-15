@@ -30,9 +30,7 @@ public class MenuPacienteActivity extends AppCompatActivity {
         pacienteDao = new PacienteDao();
         comprobarRolPaciente();
 
-        vista.btnVerProfesionales.setOnClickListener(view -> {
-            startActivity(new Intent(this, ListaProfesionalesActivity.class));
-        });
+        vista.btnReservarCita.setOnClickListener(view -> abrirProfesionales());
 
         vista.btnVerCitas.setOnClickListener(view -> {
             startActivity(new Intent(this, MisCitasActivity.class));
@@ -47,6 +45,10 @@ public class MenuPacienteActivity extends AppCompatActivity {
             startActivity(new Intent(this, InicioSesionActivity.class));
             finish();
         });
+    }
+
+    private void abrirProfesionales() {
+        startActivity(new Intent(this, ListaProfesionalesActivity.class));
     }
 
     private void comprobarRolPaciente() {

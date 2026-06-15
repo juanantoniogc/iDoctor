@@ -22,6 +22,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="46dp"
             android:layout_height="46dp"
+            android:visibility="gone"
             app:cardBackgroundColor="#E3F2FD"
             app:cardCornerRadius="23dp"
             app:cardElevation="0dp"
@@ -40,12 +41,11 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtFecha"
+                android:id="@+id/txtTituloConsulta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#0D47A1"
@@ -53,7 +53,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txtHora"
+                android:id="@+id/txtFechaHora"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

@@ -13,6 +13,7 @@ import com.example.idoctor.dao.AutenticacionDao;
 import com.example.idoctor.databinding.ActivityInicioSesionBinding;
 import com.example.idoctor.models.Usuario;
 import com.example.idoctor.validations.Validaciones;
+import com.example.idoctor.utils.MusicPlayer;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -99,6 +100,7 @@ public class InicioSesionActivity extends AppCompatActivity {
         vista.btnIniciarSesion.setEnabled(false);
         autenticacionDao.iniciarSesionConCorreo(correo, contrasena).addOnCompleteListener(tarea -> {
             if (tarea.isSuccessful() && tarea.getResult().getUser() != null) {
+                MusicPlayer.reproducirInicio(this);
                 comprobarPerfilUsuario(tarea.getResult().getUser().getUid());
                 return;
             }
@@ -145,6 +147,7 @@ public class InicioSesionActivity extends AppCompatActivity {
 
         autenticacionDao.iniciarSesionConGoogle(credencial).addOnCompleteListener(tarea -> {
             if (tarea.isSuccessful() && tarea.getResult().getUser() != null) {
+                MusicPlayer.reproducirInicio(this);
                 comprobarPerfilUsuario(tarea.getResult().getUser().getUid());
                 return;
             }

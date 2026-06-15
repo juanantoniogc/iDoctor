@@ -7,12 +7,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.idoctor.dao.AutenticacionDao;
+import com.example.idoctor.dao.CitaDao;
 import com.example.idoctor.dao.EvaluacionDao;
+import com.example.idoctor.dao.ProfesionalDao;
 import com.example.idoctor.dao.ValoracionDao;
 import com.example.idoctor.databinding.ActivityCrearValoracionBinding;
+import com.example.idoctor.models.Cita;
+import com.example.idoctor.models.Profesional;
 import com.example.idoctor.models.Valoracion;
 import com.example.idoctor.validations.Validaciones;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -21,7 +26,9 @@ public class CrearValoracionActivity extends AppCompatActivity {
 
     private ActivityCrearValoracionBinding vista;
     private AutenticacionDao autenticacionDao;
+    private CitaDao citaDao;
     private EvaluacionDao evaluacionDao;
+    private ProfesionalDao profesionalDao;
     private ValoracionDao valoracionDao;
     private String idCita;
     private String idProfesional;
@@ -34,19 +41,99 @@ public class CrearValoracionActivity extends AppCompatActivity {
         setContentView(vista.getRoot());
 
         autenticacionDao = new AutenticacionDao();
+        citaDao = new CitaDao();
         evaluacionDao = new EvaluacionDao();
+        profesionalDao = new ProfesionalDao();
         valoracionDao = new ValoracionDao();
 
         idCita = getIntent().getStringExtra("idCita");
         idProfesional = getIntent().getStringExtra("idProfesional");
         idPacienteCita = getIntent().getStringExtra("idPaciente");
 
-        vista.txtDatosCita.setText("Cita: " + texto(idCita));
-        vista.txtDatosProfesional.setText("Profesional: " + texto(idProfesional));
+        vista.txtDatosCita.setText("Cargando cita");
+        vista.txtDatosProfesional.setText("Cargando profesional");
+        cargarDatosVisibles();
         configurarLimpiezaErrores();
 
         vista.btnGuardarValoracion.setOnClickListener(view -> guardarValoracion());
         vista.btnVolver.setOnClickListener(view -> finish());
+    }
+
+    private void cargarDatosVisibles() {
+        if (estaVacio(idCita)) {
+            vista.txtDatosCita.setText("Cita del Sin datos");
+        } else {
+            cargarCitaVisible();
+        }
+
+        if (estaVacio(idProfesional)) {
+            vista.txtDatosProfesional.setText("Con el profesional Sin datos");
+        } else {
+            cargarProfesionalVisible();
+        }
+    }
+
+    private void cargarCitaVisible() {
+        citaDao.obtenerCitaPorId(idCita, new CitaDao.CitaListener() {
+            @Override
+            public void citaEncontrada(Cita cita) {
+                vista.txtDatosCita.setText("Cita del " + formatearCita(cita));
+            }
+
+            @Override
+            public void error(String mensajeError) {
+                vista.txtDatosCita.setText("Cita del Sin datos");
+            }
+        });
+    }
+
+    private void cargarProfesionalVisible() {
+        profesionalDao.obtenerProfesional(idProfesional, new ProfesionalDao.ProfesionalListener() {
+            @Override
+            public void profesionalEncontrado(Profesional profesional) {
+                vista.txtDatosProfesional.setText("Con el profesional " + obtenerNombreProfesional(profesional));
+            }
+
+            @Override
+            public void error(String mensajeError) {
+                vista.txtDatosProfesional.setText("Con el profesional Sin datos");
+            }
+        });
+    }
+
+    private String formatearCita(Cita cita) {
+        if (cita == null) {
+            return "Sin datos";
+        }
+
+        return formatearFecha(cita.getFecha()) + " a las " + texto(cita.getHora());
+    }
+
+    private String formatearFecha(String fecha) {
+        if (estaVacio(fecha)) {
+            return "Sin datos";
+        }
+
+        try {
+            SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat formatoSalida = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            return formatoSalida.format(formatoEntrada.parse(fecha));
+        } catch (ParseException | NullPointerException error) {
+            return fecha;
+        }
+    }
+
+    private String obtenerNombreProfesional(Profesional profesional) {
+        if (profesional == null) {
+            return "Sin datos";
+        }
+
+        String nombreCompleto = (texto(profesional.getNombre()) + " " + texto(profesional.getApellidos())).trim();
+        if (nombreCompleto.equals("Sin datos Sin datos")) {
+            return "Sin datos";
+        }
+
+        return nombreCompleto;
     }
 
     private void configurarLimpiezaErrores() {

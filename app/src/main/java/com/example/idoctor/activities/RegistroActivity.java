@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.idoctor.dao.AutenticacionDao;
 import com.example.idoctor.databinding.ActivityRegistroBinding;
 import com.example.idoctor.validations.Validaciones;
+import com.example.idoctor.utils.MusicPlayer;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -52,6 +53,7 @@ public class RegistroActivity extends AppCompatActivity {
         vista.btnRegistrarse.setEnabled(false);
         autenticacionDao.registrarConCorreo(correo, contrasena).addOnCompleteListener(tarea -> {
             if (tarea.isSuccessful() && tarea.getResult().getUser() != null) {
+                MusicPlayer.reproducirInicio(this);
                 mostrarMensaje("Usuario creado correctamente");
                 startActivity(new Intent(this, CompletarPerfilActivity.class));
                 finish();

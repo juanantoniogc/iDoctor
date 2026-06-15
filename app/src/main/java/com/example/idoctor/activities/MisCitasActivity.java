@@ -11,17 +11,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.idoctor.adapters.AdaptadorCitas;
 import com.example.idoctor.dao.AutenticacionDao;
 import com.example.idoctor.dao.CitaDao;
+import com.example.idoctor.dao.EvaluacionDao;
 import com.example.idoctor.databinding.ActivityMisCitasBinding;
 import com.example.idoctor.models.Cita;
+import com.example.idoctor.models.Evaluacion;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MisCitasActivity extends AppCompatActivity {
 
     private ActivityMisCitasBinding vista;
     private AutenticacionDao autenticacionDao;
     private CitaDao citaDao;
+    private EvaluacionDao evaluacionDao;
     private AdaptadorCitas adaptadorCitas;
     private List<Cita> citas;
 
@@ -33,6 +38,7 @@ public class MisCitasActivity extends AppCompatActivity {
 
         autenticacionDao = new AutenticacionDao();
         citaDao = new CitaDao();
+        evaluacionDao = new EvaluacionDao();
         citas = new ArrayList<>();
 
         configurarLista();
@@ -69,10 +75,37 @@ public class MisCitasActivity extends AppCompatActivity {
         citaDao.obtenerCitasPorPaciente(idPaciente, new CitaDao.CitasListener() {
             @Override
             public void citasEncontradas(List<Cita> citasEncontradas) {
-                citas.clear();
-                citas.addAll(citasEncontradas);
-                adaptadorCitas.notifyDataSetChanged();
+                cargarEvaluacionesYMostrarCitas(idPaciente, citasEncontradas);
+            }
 
+            @Override
+            public void error(String mensajeError) {
+                Toast.makeText(MisCitasActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void cargarEvaluacionesYMostrarCitas(String idPaciente, List<Cita> citasEncontradas) {
+        evaluacionDao.obtenerEvaluacionesPorPaciente(idPaciente, new EvaluacionDao.EvaluacionesListener() {
+            @Override
+            public void evaluacionesEncontradas(List<Evaluacion> evaluaciones) {
+                Set<String> idsCitasEvaluadas = new HashSet<>();
+
+                for (Evaluacion evaluacion : evaluaciones) {
+                    if (evaluacion.getIdCita() != null && !evaluacion.getIdCita().trim().isEmpty()) {
+                        idsCitasEvaluadas.add(evaluacion.getIdCita());
+                    }
+                }
+
+                citas.clear();
+
+                for (Cita cita : citasEncontradas) {
+                    if (!idsCitasEvaluadas.contains(cita.getId())) {
+                        citas.add(cita);
+                    }
+                }
+
+                adaptadorCitas.notifyDataSetChanged();
                 vista.txtSinCitas.setVisibility(citas.isEmpty() ? View.VISIBLE : View.GONE);
             }
 

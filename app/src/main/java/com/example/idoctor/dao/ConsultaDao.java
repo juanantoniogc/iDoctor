@@ -67,6 +67,30 @@ public class ConsultaDao {
                 .setValue(consulta);
     }
 
+    public void obtenerConsulta(String idConsulta, ConsultaListener listener) {
+        referenciaConsultas
+                .child(idConsulta)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Consulta consulta = snapshot.getValue(Consulta.class);
+                            if (consulta != null && (consulta.getId() == null || consulta.getId().isEmpty())) {
+                                consulta.setId(snapshot.getKey());
+                            }
+                            listener.consultaEncontrada(consulta);
+                        } else {
+                            listener.consultaEncontrada(null);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        listener.error(error.getMessage());
+                    }
+                });
+    }
+
     public Task<Void> eliminarConsulta(String idConsulta) {
         TaskCompletionSource<Void> tarea = new TaskCompletionSource<>();
         Map<String, Object> datosParaBorrar = new HashMap<>();
@@ -171,6 +195,12 @@ public class ConsultaDao {
 
     public interface ConsultasListener {
         void consultasEncontradas(List<Consulta> consultas);
+
+        void error(String mensajeError);
+    }
+
+    public interface ConsultaListener {
+        void consultaEncontrada(Consulta consulta);
 
         void error(String mensajeError);
     }

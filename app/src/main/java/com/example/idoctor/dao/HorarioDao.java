@@ -62,6 +62,32 @@ public class HorarioDao {
                 .setValue(horario);
     }
 
+    public void existeHorarioParaDia(String idConsulta, String diaSemana, String idHorarioActual,
+                                     ExisteHorarioListener listener) {
+        obtenerHorariosPorConsulta(idConsulta, new HorariosListener() {
+            @Override
+            public void horariosEncontrados(List<Horario> horarios) {
+                for (Horario horario : horarios) {
+                    boolean mismoHorario = idHorarioActual != null
+                            && !idHorarioActual.isEmpty()
+                            && idHorarioActual.equals(horario.getId());
+
+                    if (!mismoHorario && diaSemana.equalsIgnoreCase(horario.getDiaSemana())) {
+                        listener.resultado(true);
+                        return;
+                    }
+                }
+
+                listener.resultado(false);
+            }
+
+            @Override
+            public void error(String mensajeError) {
+                listener.error(mensajeError);
+            }
+        });
+    }
+
     public Task<Void> eliminarHorario(String idHorario) {
         return referenciaHorarios
                 .child(idHorario)
@@ -70,6 +96,12 @@ public class HorarioDao {
 
     public interface HorariosListener {
         void horariosEncontrados(List<Horario> horarios);
+
+        void error(String mensajeError);
+    }
+
+    public interface ExisteHorarioListener {
+        void resultado(boolean existe);
 
         void error(String mensajeError);
     }

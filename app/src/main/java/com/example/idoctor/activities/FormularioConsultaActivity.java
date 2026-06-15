@@ -87,7 +87,7 @@ public class FormularioConsultaActivity extends AppCompatActivity {
 
         limpiarErrores();
 
-        if (!formularioValido(titulo, correo, telefono, telefonoAuxiliar, url, observaciones)) {
+        if (!formularioValido(titulo, correo, telefono, telefonoAuxiliar, observaciones)) {
             return;
         }
 
@@ -110,7 +110,7 @@ public class FormularioConsultaActivity extends AppCompatActivity {
     }
 
     private boolean formularioValido(String titulo, String correo, String telefono,
-                                     String telefonoAuxiliar, String url, String observaciones) {
+                                     String telefonoAuxiliar, String observaciones) {
         boolean valido = true;
 
         if (TextUtils.isEmpty(titulo)) {
@@ -139,11 +139,6 @@ public class FormularioConsultaActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(telefonoAuxiliar) && !Validaciones.telefonoValido(telefonoAuxiliar)) {
             vista.edtTelefonoAuxiliar.setError("El telefono auxiliar no tiene un formato valido");
-            valido = false;
-        }
-
-        if (!Validaciones.urlWebValida(url)) {
-            vista.edtUrl.setError("La URL debe empezar por http:// o https://");
             valido = false;
         }
 
