@@ -12,6 +12,7 @@ import com.example.idoctor.dao.ProfesionalDao;
 import com.example.idoctor.databinding.ActivityMenuProfesionalBinding;
 import com.example.idoctor.models.Profesional;
 import com.example.idoctor.models.Usuario;
+import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
@@ -87,7 +88,7 @@ public class MenuProfesionalActivity extends AppCompatActivity {
     private void mostrarDatosUsuario(Usuario usuario) {
         String nombreCompleto = unirNombre(usuario.getNombre(), usuario.getApellidos());
 
-        vista.txtInicialProfesional.setText(obtenerInicial(nombreCompleto));
+        cargarFoto(usuario.getFoto());
         vista.txtNombreProfesional.setText(nombreCompleto);
         vista.txtCorreoProfesional.setText("Correo: " + obtenerTexto(usuario.getCorreo()));
         vista.txtRolProfesional.setText("Perfil profesional");
@@ -100,17 +101,21 @@ public class MenuProfesionalActivity extends AppCompatActivity {
                 if (profesional == null) {
                     vista.txtTelefonoProfesional.setText("Telefono: --");
                     vista.txtDatoProfesional.setText("Colegiado: --");
+                    vista.txtEspecialidadProfesional.setText("Especialidad: --");
                     vista.txtValoracionesProfesional.setText("Valoraciones: --");
+                    vista.txtDescripcionProfesional.setText("Descripcion: --");
                     return;
                 }
 
+                cargarFoto(profesional.getFoto());
                 vista.txtTelefonoProfesional.setText("Telefono: " + obtenerTexto(profesional.getTelefono()));
-                vista.txtDatoProfesional.setText("Colegiado: " + obtenerTexto(profesional.getNumeroColegiado())
-                        + " - " + obtenerTexto(profesional.getEspecialidad()));
+                vista.txtDatoProfesional.setText("Colegiado: " + obtenerTexto(profesional.getNumeroColegiado()));
+                vista.txtEspecialidadProfesional.setText("Especialidad: " + obtenerTexto(profesional.getEspecialidad()));
                 vista.txtValoracionesProfesional.setText(String.format(Locale.getDefault(),
                         "Valoraciones: %.1f estrellas (%d)",
                         profesional.getMediaEstrellas(),
                         profesional.getNumeroValoraciones()));
+                vista.txtDescripcionProfesional.setText("Descripcion: " + obtenerTexto(profesional.getDescripcion()));
             }
 
             @Override
@@ -118,6 +123,19 @@ public class MenuProfesionalActivity extends AppCompatActivity {
                 Toast.makeText(MenuProfesionalActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void cargarFoto(String foto) {
+        if (TextUtils.isEmpty(foto)) {
+            vista.imgFotoProfesional.setImageResource(com.example.idoctor.R.drawable.bg_profile_initial);
+            return;
+        }
+
+        Picasso.get()
+                .load(foto)
+                .placeholder(com.example.idoctor.R.drawable.bg_profile_initial)
+                .error(com.example.idoctor.R.drawable.bg_profile_initial)
+                .into(vista.imgFotoProfesional);
     }
 
     private String unirNombre(String nombre, String apellidos) {
@@ -133,14 +151,6 @@ public class MenuProfesionalActivity extends AppCompatActivity {
         }
 
         return nombreSeguro + " " + apellidosSeguro;
-    }
-
-    private String obtenerInicial(String texto) {
-        if (TextUtils.isEmpty(texto) || "--".equals(texto)) {
-            return "P";
-        }
-
-        return texto.substring(0, 1).toUpperCase();
     }
 
     private String obtenerTexto(String texto) {

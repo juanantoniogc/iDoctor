@@ -12,6 +12,7 @@ import com.example.idoctor.dao.PacienteDao;
 import com.example.idoctor.databinding.ActivityMenuPacienteBinding;
 import com.example.idoctor.models.Paciente;
 import com.example.idoctor.models.Usuario;
+import com.squareup.picasso.Picasso;
 
 public class MenuPacienteActivity extends AppCompatActivity {
 
@@ -81,7 +82,7 @@ public class MenuPacienteActivity extends AppCompatActivity {
     private void mostrarDatosUsuario(Usuario usuario) {
         String nombreCompleto = unirNombre(usuario.getNombre(), usuario.getApellidos());
 
-        vista.txtInicialPaciente.setText(obtenerInicial(nombreCompleto));
+        cargarFoto(usuario.getFoto());
         vista.txtNombrePaciente.setText(nombreCompleto);
         vista.txtCorreoPaciente.setText("Correo: " + obtenerTexto(usuario.getCorreo()));
         vista.txtRolPaciente.setText("Perfil de paciente");
@@ -93,11 +94,14 @@ public class MenuPacienteActivity extends AppCompatActivity {
             public void pacienteEncontrado(Paciente paciente) {
                 if (paciente == null) {
                     vista.txtTelefonoPaciente.setText("Telefono: --");
+                    vista.txtDniPaciente.setText("DNI: --");
                     vista.txtDatoPaciente.setText("Tarjeta sanitaria: --");
                     return;
                 }
 
+                cargarFoto(paciente.getFoto());
                 vista.txtTelefonoPaciente.setText("Telefono: " + obtenerTexto(paciente.getTelefono()));
+                vista.txtDniPaciente.setText("DNI: " + obtenerTexto(paciente.getDni()));
                 vista.txtDatoPaciente.setText("Tarjeta sanitaria: " + obtenerTexto(paciente.getNumeroTarjetaSanitaria()));
             }
 
@@ -106,6 +110,19 @@ public class MenuPacienteActivity extends AppCompatActivity {
                 Toast.makeText(MenuPacienteActivity.this, mensajeError, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void cargarFoto(String foto) {
+        if (TextUtils.isEmpty(foto)) {
+            vista.imgFotoPaciente.setImageResource(com.example.idoctor.R.drawable.bg_profile_initial);
+            return;
+        }
+
+        Picasso.get()
+                .load(foto)
+                .placeholder(com.example.idoctor.R.drawable.bg_profile_initial)
+                .error(com.example.idoctor.R.drawable.bg_profile_initial)
+                .into(vista.imgFotoPaciente);
     }
 
     private String unirNombre(String nombre, String apellidos) {
@@ -121,14 +138,6 @@ public class MenuPacienteActivity extends AppCompatActivity {
         }
 
         return nombreSeguro + " " + apellidosSeguro;
-    }
-
-    private String obtenerInicial(String texto) {
-        if (TextUtils.isEmpty(texto) || "--".equals(texto)) {
-            return "P";
-        }
-
-        return texto.substring(0, 1).toUpperCase();
     }
 
     private String obtenerTexto(String texto) {
